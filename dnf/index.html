@@ -2,18 +2,1935 @@
 <html>
 <head>
     <title>DNF Test</title>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <style>
+body {
+    width: 1280px;
+    margin: 0px auto;
+}
+.div-eq {
+    width: 64px;
+    height: 40px;
+}
+.div-set {
+    width: 50px;
+    height: 50px;
+}
+.default-display-btn {
+    background: url('img/x_mark.png');
+    background-position: -4px -4px;
+    background-repeat: no-repeat;
+    background-size: 50px 50px;
+}
+.disable-links {
+    background-color: #ced4da;
+    pointer-events: none;
+}
+.display-item-btn {
+    background-repeat: no-repeat;
+    background-size: 50px 50px;
+}
+.sl-imgs {
+    margin: 0 10px 0 -10px;
+    width: 24px;
+    height: 24px;
+}
+.add-attr-span, .history-attr-span {
+    margin: 0 4px 0 10px;
+}
+.add-attr-div {
+    background-color: #e9ecef;
+    font-size: 15px;
+    padding: 8px 0 8px 10px;
+}
+.add-attr-label {
+    font-weight: normal;
+}
+.add-attr-disable {
+    color: hsla(0, 0%, 80%, 0.6);
+}
+.add-attr-skill-item, .history-attr-skill-item {
+    background-color: #e9ecef;
+    font-size: 15px;
+    margin: 0 4px 0 10px;
+}
+.compare-attr-div {
+    background-color: #e9ecef;
+    font-size: 15px;
+    padding: 8px 0 8px 10px;
+    margin: 4px 0 0 8px;
+}
+.compare-attr-down-span {
+    margin: 0 4px 0 10px;
+    color: green;
+    font-style: italic;
+    font-weight: normal;
+}
+.compare-attr-up-span {
+    margin: 0 4px 0 10px;
+    color: red;
+    font-weight: bold;
+}
+.compare-attr-eq-span {
+    margin: 0 4px 0 10px; 
+    background-color: #e9ecef;   
+}
+.row-style {
+    margin: 8px 0 0 0;
+}
+.data-extend-btn {
+    background: url('img/packup.png');
+    background-repeat: no-repeat;
+    background-size: 12px 12px;   
+    border-color: #e9ecef; 
+}
+.table-head div {
+    padding: 8px 0 8px 20px;
+    font-weight: bold;
+    font-size: 18px;
+    background-color: #e9ecef;
+}
+.history-img {
+    width:30px;
+    height:30px;
+}
+.history-row:hover {
+    color: #16181b;
+    text-decoration: none;
+    background-color: #f8f9fa;
+}
+.compare-img {
+    width: 15px;
+    height: 18px;
+    margin: 0 8px 0 0;
+}
+.compare-target-span {
+    font-weight: bold;
+    font-size: 15px;
+    color: white;
+    background-color: #01bb01;
+}
+.data-horizontal-right {
+    text-align:right;
+}
+.data-horizontal-center {
+    text-align:center;
+}
+.compare-other-value-div-compared {
+    display: none;
+}
+.foot-bar {
+    height: 30px;
+    width: 1280px;
+    margin: 150px 0 20px 0;
+}
+#status-display-pic {
+    font-weight: bold;
+}
+#version {
+    font-style: italic;
+}
+#character-type {
+    background: url('img/phy_atk.png');
+    background-repeat: no-repeat;
+    background-size: 40px 40px;
+}
+#equip-type {
+    background: url('img/eqtype_clothes.png');
+    background-repeat: no-repeat;
+    background-size: 40px 40px;
+}
+#basic-data-table, #add-attr-value-damage {
+    display: none;
+}
+input.data-code-target:out-of-range, #data-code:invalid { 
+      border-color: #DC3545;
+      outline: 0;
+      box-shadow: 0 0 0 0.2rem rgba(255,0,0,.25);
+}
     </style>
 </head>
 <body>
-    <div name="head-bar"></div>
-    <div class="container"><h2>裝備</h2></div>
-    <div class="food-bar"></div>
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <div id="head-bar">
+		<nav class="navbar navbar-light bg-light">
+		  <a class="navbar-brand" href="#">
+			<img src="img/x_mark.png" width="30" height="30" alt="">
+		  </a>
+          <div>
+            <span>アラド戦記</span>
+            <span>Session 7, Act 1</span>
+          </div>
+          <div class="my-2 my-sm-1">
+            <select><option>JP</option></select>
+            <span class="data-code-target" value="1" id="version" data-code-length="1" style='margin:0 0 0 50px'>v1.0</span>
+          </div>
+		</nav>
+    </div>
+    <div class="container data-container">
+        <div id="eq-table">
+            <div class="row">
+                <div class="input-group mb-3 col-sm-4">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">テストの名前</span>
+                    </div>
+                    <input type="text" class="form-control" id="test-name" aria-describedby="basic-addon3" />
+                </div>
+                <div class="input-group mb-3 col-sm-8">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Data Code</span>
+                    </div>
+                    <input type="text" class="form-control" id="data-code" pattern="[0-9]"/ >
+                    <button class="btn btn-light input-group-append" type="button" data-clipboard-target="#data-code" data-toggle="tooltip" id="copy-data-code" title="Copy to clipboard" >
+                        <img src="img/copy_mark.png" width="12px" height="12px"/>
+                    </button>
+                    <button class="btn btn-light input-group-append" type="button"  data-toggle="tooltip" id="load-data-code" title="Load Data Code">
+                        <img src="img/load_mark.png" width="12px" height="12px"/>
+                    </button>
+                </div>
+            </div>
+            <div class="row justify-content-md-center">
+                <div class="col col-md-1">
+					<div class="btn-group div-eq">
+                        <button class="btn btn-light btn-sm col-sm-8 data-code-target" type="button" data-toggle="tooltip" data-placement="top" id="character-type" data-original-title="物理攻擊" value="1" data-code-length="1">
+                        </button>
+					  <button class="btn btn-light btn-sm dropdown-toggle dropdown-toggle-split col-sm-4" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="sr-only">Toggle Dropdown</span></button>
+					  <div class="dropdown-menu" parent-id="character-type" id="sl-character-type">
+                          <a class="dropdown-item normal-select" href="#" value="1" title="物理攻擊" data-img-url="img/phy_atk.png"><img class="sl-imgs" src="img/phy_atk.png"/>物理攻擊</a>
+                          <a class="dropdown-item normal-select" href="#" value="2" title="魔法攻擊" data-img-url="img/mag_atk.png"><img class="sl-imgs" src="img/mag_atk.png"/>魔法攻擊</a>
+                          <a class="dropdown-item normal-select" href="#" value="3" title="独立攻擊:物" data-img-url="img/phy_fix_atk.png"><img class="sl-imgs" src="img/phy_fix_atk.png"/>独立攻擊:物</a>
+                          <a class="dropdown-item normal-select" href="#" value="4" title="独立攻擊:魔" data-img-url="img/mag_fix_atk.png"><img class="sl-imgs" src="img/mag_fix_atk.png"/>独立攻擊:魔</a>
+                          <a class="dropdown-item disable-links" href="#" value="5" title="♂クルセ" data-img-url="img/kuruse_m.png"><img class="sl-imgs" src="img/kuruse_m.png"/>♂クルセ</a>
+                          <a class="dropdown-item disable-links" href="#" value="6" title="♀クルセ" data-img-url="img/kuruse_f.png"><img class="sl-imgs" src="img/kuruse_f.png">♀クルセ</a>
+                          <a class="dropdown-item disable-links" href="#" value="7" title="メガクルセ" data-img-url="img/sup_mag.png"><img class="sl-imgs" src="img/sup_mag.png">メガクルセ</a>
+					  </div>
+					</div>
+                </div>
+                <div class="col col-md-1">
+					<div class="btn-group div-eq">
+                        <button class="btn btn-light btn-sm col-sm-8 data-code-target" type="button" data-toggle="tooltip" data-placement="top" id="equip-type" data-original-title="クロース" value="1" data-code-length="1">
+                        </button>
+					  <button class="btn btn-light btn-sm dropdown-toggle dropdown-toggle-split col-sm-4" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="sr-only">Toggle Dropdown</span></button>
+					  <div class="dropdown-menu" parent-id="equip-type" id="sl-equip-type">
+                          <a class="dropdown-item normal-select" href="#" value="1" title="クロース" data-img-url="img/eqtype_clothes.png">クロース</a>
+                          <a class="dropdown-item normal-select" href="#" value="2" title="レザー" data-img-url="img/eqtype_reza.png">レザー</a>
+                          <a class="dropdown-item normal-select" href="#" value="3" title="軽甲" data-img-url="img/eqtype_kei.png">軽甲</a>
+                          <a class="dropdown-item normal-select" href="#" value="4" title="重甲" data-img-url="img/eqtype_wight.png">重甲</a>
+                          <a class="dropdown-item normal-select" href="#" value="5" title="板金" data-img-url="img/eqtype_kin.png">板金</a>
+					  </div>
+					</div>
+                </div>
+                <div class="col col-md-1"></div>
+                <div class="col col-md-1">
+					<div class="btn-group div-eq">
+                        <button class="btn btn-danger btn-sm col-sm-8 default-display-btn data-code-target equip-all" type="button" data-toggle="tooltip" data-placement="top" id="menu-weapon" data-original-title="なし" value="0" data-code-length="2">
+                        </button>
+					  <button class="btn btn-danger btn-sm dropdown-toggle dropdown-toggle-split col-sm-4" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="sr-only">Toggle Dropdown</span></button>
+					  <div class="dropdown-menu" parent-id="menu-weapon" id="sl-weapon">
+                          <a class="dropdown-item" href="#" value="0">なし</a>
+					  </div>
+					</div>
+                </div>
+                <div class="col col-md-1">
+					<div class="btn-group div-eq">
+                        <button class="btn btn-secondary btn-sm col-sm-8 default-display-btn data-code-target equip-all" type="button" data-toggle="tooltip" data-placement="top" id="menu-designation" data-original-title="なし" value="0" data-code-length="2">
+                        </button>
+					  <button class="btn btn-secondary btn-sm dropdown-toggle dropdown-toggle-split col-sm-4" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="sr-only">Toggle Dropdown</span></button>
+					  <div class="dropdown-menu" parent-id="menu-designation" id="sl-designation">
+                          <a class="dropdown-item" href="#" value="0">なし</a>
+					  </div>
+					</div>
+                </div>
+            </div>
+            <div class="row justify-content-md-center">
+                <div class="dropdown-divider"></div>
+            </div>
+            <div class="row justify-content-md-center">
+                <div class="col col-md-1">
+					<div class="btn-group div-eq">
+                        <button class="btn btn-warning btn-sm col-sm-8 default-display-btn data-code-target equip-all equip-eq" type="button" data-toggle="tooltip" data-placement="top" id="menu-eq-shoulder" data-original-title="なし" value="0" data-code-length="2">
+                        </button>
+					  <button class="btn btn-warning btn-sm dropdown-toggle dropdown-toggle-split col-sm-4" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <span class="sr-only">Toggle Dropdown</span>
+                      </button>
+					  <div class="dropdown-menu" parent-id="menu-eq-shoulder" id="sl-eq-shoulder">
+                          <a class="dropdown-item" href="#" value="0">なし</a>
+					  </div>
+					</div>
+                </div>
+                <div class="col col-md-1">
+					<div class="btn-group div-eq">
+                        <button class="btn btn-warning btn-sm col-sm-8 default-display-btn data-code-target equip-all equip-eq" type="button" data-toggle="tooltip" data-placement="top" id="menu-eq-clothes" data-original-title="なし" value="0" data-code-length="2">
+                        </button>
+					  <button class="btn btn-warning btn-sm dropdown-toggle dropdown-toggle-split col-sm-4" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <span class="sr-only">Toggle Dropdown</span>
+                      </button>
+					  <div class="dropdown-menu" parent-id="menu-eq-clothes" id="sl-eq-clothes">
+                          <a class="dropdown-item" href="#" value="0">なし</a>
+					  </div>
+					</div>
+                </div>
+                <div class="col col-md-1"></div>
+                <div class="col col-md-1">
+					<div class="btn-group div-eq">
+                        <button class="btn btn-info btn-sm col-sm-8 default-display-btn data-code-target equip-all equip-ac" type="button" data-toggle="tooltip" data-placement="top" id="menu-ac-wristband" data-original-title="なし" value="0" data-code-length="2">
+                        </button>
+					  <button class="btn btn-info btn-sm dropdown-toggle dropdown-toggle-split col-sm-4" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <span class="sr-only">Toggle Dropdown</span>
+                      </button>
+					  <div class="dropdown-menu" parent-id="menu-ac-wristband" id="sl-ac-wristband">
+                          <a class="dropdown-item" href="#" value="0">なし</a>
+					  </div>
+					</div>
+                </div>
+                <div class="col col-md-1">
+					<div class="btn-group div-eq">
+                        <button class="btn btn-info btn-sm col-sm-8 default-display-btn data-code-target equip-all equip-ac" type="button" data-toggle="tooltip" data-placement="top" id="menu-ac-necklace" data-original-title="なし" value="0" data-code-length="2">
+                        </button>
+					  <button class="btn btn-info btn-sm dropdown-toggle dropdown-toggle-split col-sm-4" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <span class="sr-only">Toggle Dropdown</span>
+                      </button>
+					  <div class="dropdown-menu" parent-id="menu-ac-necklace" id="sl-ac-necklace">
+                          <a class="dropdown-item" href="#" value="0">なし</a>
+					  </div>
+					</div>
+                </div>
+            </div>
+            <div class="row justify-content-md-center">
+                <div class="col col-md-1">
+					<div class="btn-group div-eq">
+                        <button class="btn btn-warning btn-sm col-sm-8 default-display-btn data-code-target equip-all equip-eq" type="button" data-toggle="tooltip" data-placement="top" id="menu-eq-pants" data-original-title="なし" value="0" data-code-length="2">
+                        </button>
+					  <button class="btn btn-warning btn-sm dropdown-toggle dropdown-toggle-split col-sm-4" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <span class="sr-only">Toggle Dropdown</span>
+                      </button>
+					  <div class="dropdown-menu" parent-id="menu-eq-pants" id="sl-eq-pants">
+                          <a class="dropdown-item" href="#" value="0">なし</a>
+					  </div>
+					</div>
+                </div>
+                <div class="col col-md-1">
+					<div class="btn-group div-eq">
+                        <button class="btn btn-warning btn-sm col-sm-8 default-display-btn data-code-target equip-all equip-eq" type="button" data-toggle="tooltip" data-placement="top" id="menu-eq-waist" data-original-title="なし" value="0" data-code-length="2">
+                        </button>
+					  <button class="btn btn-warning btn-sm dropdown-toggle dropdown-toggle-split col-sm-4" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <span class="sr-only">Toggle Dropdown</span>
+                      </button>
+					  <div class="dropdown-menu" parent-id="menu-eq-waist" id="sl-eq-waist">
+                          <a class="dropdown-item" href="#" value="0">なし</a>
+					  </div>
+					</div>
+                </div>
+                <div class="col col-md-1"></div>
+                <div class="col col-md-1">
+					<div class="btn-group div-eq">
+                        <button class="btn btn-success btn-sm col-sm-8 default-display-btn data-code-target equip-all equip-dec" type="button" data-toggle="tooltip" data-placement="top" id="menu-dec-assist" data-original-title="なし" value="0" data-code-length="2">
+                        </button>
+					  <button class="btn btn-success btn-sm dropdown-toggle dropdown-toggle-split col-sm-4" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <span class="sr-only">Toggle Dropdown</span>
+                      </button>
+					  <div class="dropdown-menu" parent-id="menu-dec-assist" id="sl-dec-assist">
+                          <a class="dropdown-item" href="#" value="0">なし</a>
+					  </div>
+					</div>
+                </div>
+                <div class="col col-md-1">
+					<div class="btn-group div-eq">
+                        <button class="btn btn-info btn-sm col-sm-8 default-display-btn data-code-target equip-all equip-ac" type="button" data-toggle="tooltip" data-placement="top" id="menu-ac-ring" data-original-title="なし" value="0" data-code-length="2">
+                        </button>
+					  <button class="btn btn-info btn-sm dropdown-toggle dropdown-toggle-split col-sm-4" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <span class="sr-only">Toggle Dropdown</span>
+                      </button>
+					  <div class="dropdown-menu" parent-id="menu-ac-ring" id="sl-ac-ring">
+                          <a class="dropdown-item" href="#" value="0">なし</a>
+					  </div>
+					</div>
+                </div>
+            </div>
+            <div class="row justify-content-md-center">
+                <div class="col col-md-1">
+					<div class="btn-group div-eq">
+                        <button class="btn btn-warning btn-sm col-sm-8 default-display-btn data-code-target equip-all equip-eq" type="button" data-toggle="tooltip" data-placement="top" id="menu-eq-shoes" data-original-title="なし" value="0" data-code-length="2">
+                        </button>
+					  <button class="btn btn-warning btn-sm dropdown-toggle dropdown-toggle-split col-sm-4" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <span class="sr-only">Toggle Dropdown</span>
+                      </button>
+					  <div class="dropdown-menu" parent-id="menu-eq-shoes" id="sl-eq-shoes">
+                          <a class="dropdown-item" href="#" value="0">なし</a>
+					  </div>
+					</div>
+                </div>
+                <div class="col col-md-2"></div>
+                <div class="col col-md-1">
+					<div class="btn-group div-eq">
+                        <button class="btn btn-success btn-sm col-sm-8 default-display-btn data-code-target equip-all equip-dec" type="button" data-toggle="tooltip" data-placement="top" id="menu-dec-earring" data-original-title="なし" value="0" data-code-length="2">
+                        </button>
+					  <button class="btn btn-success btn-sm dropdown-toggle dropdown-toggle-split col-sm-4" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <span class="sr-only">Toggle Dropdown</span>
+                      </button>
+					  <div class="dropdown-menu" parent-id="menu-dec-earring" id="sl-dec-earring">
+                          <a class="dropdown-item" href="#" value="0">なし</a>
+					  </div>
+					</div>
+                </div>
+                <div class="col col-md-1">
+					<div class="btn-group div-eq">
+                        <button class="btn btn-success btn-sm col-sm-8 default-display-btn data-code-target equip-all equip-dec" type="button" data-toggle="tooltip" data-placement="top" id="menu-dec-stone" data-original-title="なし" value="0" data-code-length="2">
+                        </button>
+					  <button class="btn btn-success btn-sm dropdown-toggle dropdown-toggle-split col-sm-4" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <span class="sr-only">Toggle Dropdown</span>
+                      </button>
+					  <div class="dropdown-menu" parent-id="menu-dec-stone" id="sl-dec-stone">
+                          <a class="dropdown-item" href="#" value="0">なし</a>
+					  </div>
+					</div>
+                </div>
+            </div>
+            <div class="row"><hr class="style11"></div>
+            <div class="row justify-content-md-center">
+                <div class="col col-md-1" style="font-size:15px;vertical-align: middle;font-weight:bold;padding: 15px 5px 0 20px;">
+                    セット:
+                </div>
+                <div class="col col-md-6" id="eq-set-list">
+                </div>
+            </div>
+            <div class="row"><hr class="style11"></div>
+            <div class="row justify-content-md-center">
+                <div class="col col-md-5"></div>
+                <div class="col">
+                    <button class="btn btn-primary btn-lg col-sm-4" type="button" id="btn-calc">計算</button>
+                </div>
+            </div>
+        </div>
+        <div class="row"><hr class="style11"></div>
+        <div id="basic-data">
+            <div class="row justify-content-md-center">
+                <h3 class="col col-md-3">マイステータス</h3>
+                <button class="btn btn-light btn-sm data-extend-btn" status="false" target-div="basic-data-table" onClick="displayBasicData(this);" style="background-position: 2px 14px;"></button>
+            </div>
+            <div class="row"><hr class="style11"></div>
+            <div id="basic-data-table">
+            <div class="row justify-content-md-center">
+                <div class="col col-md-1"></div>
+                <div class="input-group input-group-sm mb-4 col-md-2">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">力量</span>
+                    </div>
+                    <input type="number" min="1" max="50000" class="form-control data-code-target status-all" placeholder="100" data-code-length="3" id="status-str" />
+                </div>
+                <div class="input-group input-group-sm mb-4 col-md-2">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">智力</span>
+                    </div>
+                    <input type="number" min="1" max="50000" class="form-control data-code-target status-all" placeholder="100" data-code-length="3" id="status-int" />
+                </div>
+                <div class="input-group input-group-sm mb-4 col-md-2">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">体力</span>
+                    </div>
+                    <input type="number" min="1" max="50000" class="form-control data-code-target status-all" placeholder="100" data-code-length="3" id="status-vit" />
+                </div>
+                <div class="input-group input-group-sm mb-4 col-md-2">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">精神</span>
+                    </div>
+                    <input type="number" min="1" max="50000" class="form-control data-code-target status-all" placeholder="100" data-code-length="3" id="status-mag" />
+                </div>
+            </div>
+            <div class="row justify-content-md-center">
+                <div class="col col-md-1"></div>
+                <div class="input-group input-group-sm mb-4 col-md-2">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">物攻</span>
+                    </div>
+                    <input type="number" min="1" max="1000000" class="form-control data-code-target status-all" placeholder="100" data-code-length="4"  id="status-phy_atk" />
+                </div>
+                <div class="input-group input-group-sm mb-4 col-md-2">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">魔攻</span>
+                    </div>
+                    <input type="number" min="1" max="1000000" class="form-control data-code-target status-all" placeholder="100" data-code-length="4"  id="status-mag_atk"/>
+                </div>
+                <div class="input-group input-group-sm mb-4 col-md-4">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">独立攻撃(物/魔)</span>
+                    </div>
+                    <input type="number" min="1" max="50000" class="form-control data-code-target status-all" placeholder="100" data-code-length="3" id="status-fix_atk"/>
+                </div>
+            </div>
+            <div class="row justify-content-md-center">
+                <div class="col col-md-1"></div>
+                <div class="input-group input-group-sm mb-4 col-md-2">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">攻速</span>
+                    </div>
+                    <input type="number" min="1" max="500" class="form-control data-code-target status-all" placeholder="100" data-code-length="2" id="status-speed_atk" />
+                </div>
+                <div class="input-group input-group-sm mb-4 col-md-2">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">ｷｬｽﾄ速</span>
+                    </div>
+                    <input type="number" min="1" max="500" class="form-control data-code-target status-all" placeholder="100" data-code-length="2" id="status-speed_cast"/>
+                </div>
+                <div class="input-group input-group-sm mb-4 col-md-2">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">移速</span>
+                    </div>
+                    <input type="number" min="1" max="500" class="form-control data-code-target status-all" placeholder="100" data-code-length="2" id="status-speed_move"/>
+                </div>
+            </div>
+            <div class="row justify-content-md-center">
+                <div class="col col-md-1"></div>
+                <div class="input-group input-group-sm mb-4 col-md-2">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">火属性</span>
+                    </div>
+                    <input type="number" min="1" max="1000" class="form-control data-code-target status-all" placeholder="100" data-code-length="2" id="status-attr_fire"/>
+                </div>
+                <div class="input-group input-group-sm mb-4 col-md-2">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">水属性</span>
+                    </div>
+                    <input type="number" min="1" max="1000" class="form-control data-code-target status-all" placeholder="100" data-code-length="2" id="status-attr_water" />
+                </div>
+                <div class="input-group input-group-sm mb-4 col-md-2">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">光属性</span>
+                    </div>
+                    <input type="number" min="1" max="1000" class="form-control data-code-target status-all" placeholder="100" data-code-length="2" id="status-attr_light" />
+                </div>
+                <div class="input-group input-group-sm mb-4 col-md-2">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">闇属性</span>
+                    </div>
+                    <input type="number" min="1" max="1000" class="form-control data-code-target status-all" placeholder="100" data-code-length="2" id="status-attr_dark" />
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+    <div class="row"><hr class="style11"></div>
+    <div class="data-container" id="rs-container">
+        <div class="row justify-content-md-center">
+            <div class="col col-md-1"></div>
+            <div class="col col-md-2">
+                <h2>
+                    <span class="">倍率:</span>
+                </h2>
+            </div>
+            <div class="col col-md-4">
+                <h2>
+                    <span id="result">0.00</span>
+                    <span class=""></span>
+                </h2>
+            </div>            
+        </div>
+        <div class="row justify-content-md-center">
+            <button class="btn btn-light data-extend-btn" status="false" target-div="add-attr-value-damage" onClick="displayBasicData(this);" style="width:400px; height:12px; background-position: 200px 0;"></button>
+        </div>
+        <div id="add-attr-value-damage">
+            <div class="row justify-content-md-center row-style">
+                    <div class="col col-md-2"></div>
+                <div class="col col-md-7">
+                    <span class="badge badge-lg badge-light add-attr-div add-attr-disable">
+                        <span class="add-attr-label">力</span><span class="add-attr-span">+<span id="add-attr-str">0</span></span> <span class="add-attr-span">+<span id="add-attr-p_str">0</span>%</span>
+                    </span>
+                    <span class="badge badge-lg badge-light add-attr-div add-attr-disable">
+                        <span class="add-attr-label">智</span><span class="add-attr-span">+<span id="add-attr-int">0</span></span> <span class="add-attr-span">+<span id="add-attr-p_int">0</span>%</span>
+                    </span>
+                    <span class="badge badge-lg badge-light add-attr-div add-attr-disable">
+                        <span class="add-attr-label">体</span><span class="add-attr-span">+<span id="add-attr-vit">0</span></span> <span class="add-attr-span">+<span id="add-attr-p_vit">0</span>%</span>
+                    </span>
+                    <span class="badge badge-lg badge-light add-attr-div add-attr-disable">
+                        <span class="add-attr-label">精</span><span class="add-attr-span">+<span id="add-attr-mag">0</span></span> <span class="add-attr-span">+<span id="add-attr-p_mag">0</span>%</span>
+                    </span>
+                </div>
+            </div>
+            <div class="row justify-content-md-center row-style">
+                    <div class="col col-md-2"></div>
+                <div class="col col-md-5">
+                    <span class="badge badge-lg badge-light add-attr-div add-attr-disable">
+                        <span class="add-attr-label">火</span><span class="add-attr-span">+<span id="add-attr-attr_fire">0</span></span>
+                    </span>
+                    <span class="badge badge-lg badge-light add-attr-div add-attr-disable">
+                        <span class="add-attr-label">水</span><span class="add-attr-span">+<span id="add-attr-attr_water">0</span></span>
+                    </span>
+                    <span class="badge badge-lg badge-light add-attr-div add-attr-disable">
+                        <span class="add-attr-label">光</span><span class="add-attr-span">+<span id="add-attr-attr_light">0</span></span>
+                    </span>
+                    <span class="badge badge-lg badge-light add-attr-div add-attr-disable">
+                        <span class="add-attr-label">闇</span><span class="add-attr-span">+<span id="add-attr-attr_dark">0</span></span>
+                    </span>
+                </div>
+            </div>
+            <div class="row justify-content-md-center row-style">
+                <div class="col col-md-2"></div>
+                <div class="col col-md-7">
+                    <span class="badge badge-lg badge-light add-attr-div add-attr-disable">
+                        <span class="add-attr-label">物理攻撃</span><span class="add-attr-span">+<span id="add-attr-phy_atk">0</span></span> <span class="add-attr-span">+<span id="add-attr-p_phy_atk">0</span>%</span>
+                    </span>
+                    <span class="badge badge-lg badge-light add-attr-div add-attr-disable">
+                        <span class="add-attr-label">魔法攻撃</span><span class="add-attr-span">+<span id="add-attr-mag_atk">0</span></span> <span class="add-attr-span">+<span id="add-attr-p_mag_atk">0</span>%</span>
+                    </span>
+                    <span class="badge badge-lg badge-light add-attr-div add-attr-disable">
+                        <span class="add-attr-label">独立攻撃<span id="add-attr-target_fix_atk"></span></span><span class="add-attr-span">+<span id="add-attr-fix_atk">0</span></span> <span class="add-attr-span">+<span id="add-attr-p_fix_atk">0</span>%</span>
+                    </span>                    
+                </div>
+            </div>
+            <div class="row justify-content-md-center row-style">                
+                <div class="col col-md-2">
+                    <span class="badge badge-lg badge-light add-attr-div add-attr-disable">
+                        <span class="add-attr-label">ダメージ增加</span><span class="add-attr-span">+<span id="add-attr-inc_damage">0</span>%</span>
+                    </span>               
+                </div>
+                <div class="col col-md-2">    
+                    <span class="badge badge-lg badge-light add-attr-div add-attr-disable">
+                        <span class="add-attr-label">ｸﾘﾃ ダメージ增加</span><span class="add-attr-span">+<span id="add-attr-cri_damage">0</span>%</span>
+                    </span>                                                    
+                </div>
+            </div>
+            <div class="row justify-content-md-center row-style">                    
+                <div class="col col-md-2">                                  
+                    <span class="badge badge-lg badge-light add-attr-div add-attr-disable">
+                        <span class="add-attr-label">追加ダメージ</span><span class="add-attr-span">+<span id="add-attr-add_damage">0</span>%</span>
+                    </span>             
+                </div>
+                <div class="col col-md-2">       
+                    <span class="badge badge-lg badge-light add-attr-div add-attr-disable">
+                        <span class="add-attr-label">屬性追加ダメージ<span id="add-attr-target_element"></span></span><span class="add-attr-span">+<span id="add-attr-add_attr_damage">0</span>%</span>
+                    </span>                    
+                </div>
+            </div>
+            <div class="row justify-content-md-center row-style">
+                    <div class="col col-md-2"></div>
+                <div class="col col-md-5">                                  
+                    <span class="badge badge-lg badge-light add-attr-div add-attr-disable">
+                        <span class="add-attr-label">スキル攻擊</span><span class="add-attr-span">+<span id="add-attr-skill_damage">0</span>%</span>
+                    </span>                    
+                    <span class="badge badge-lg badge-light add-attr-div add-attr-disable">
+                        <span class="add-attr-label">全ての攻擊<span></span></span><span class="add-attr-span">+<span id="add-attr-all_damage">0</span>%</span>
+                    </span>                    
+                </div>
+            </div>
+        </div>
+        <div id="add-attr-value-other">
+            <div class="row justify-content-md-center row-style">
+                <div class="col col-md-1">
+                    <div class="badge badge-lg badge-light" id="add-attr-skill">
+                        <span class="badge badge-lg badge-light add-attr-div add-attr-disable">
+                            <span class="add-attr-label">スキル</span><span class="add-attr-span"></span>
+                        </span>                        
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-md-center row-style">
+                <div class="col col-md-2"></div>
+                <div class="col col-md-7">
+                    <span class="badge badge-lg badge-light add-attr-div add-attr-disable">
+                        <span class="add-attr-label">攻速</span><span class="add-attr-span">+<span id="add-attr-speed_atk">0</span>%</span>
+                    </span> 
+                    <span class="badge badge-lg badge-light add-attr-div add-attr-disable">
+                        <span class="add-attr-label">ｷｬｽﾄ速</span><span class="add-attr-span">+<span id="add-attr-speed_cast">0</span>%</span>
+                    </span>
+                    <span class="badge badge-lg badge-light add-attr-div add-attr-disable">
+                        <span class="add-attr-label">移速</span><span class="add-attr-span">+<span id="add-attr-speed_move">0</span>%</span>
+                    </span>    
+                    <span class="badge badge-lg badge-light add-attr-div add-attr-disable">
+                        <span class="add-attr-label">ｸﾘﾃｨｶﾙ</span><span id="add-attr-target_cri"></span><span class="add-attr-span">+<span id="add-attr-cri">0</span>%</span>
+                    </span>               
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row"><hr class="style11"></div>
+    <div class="data-container"> 
+        <div class="row justify-content-md-center table-head">
+            <div class="col col-sm-2">テストの名前</div>
+            <div class="col col-sm-4">裝備</div>
+            <div class="col col-sm-2 data-horizontal-center">倍率</div>
+            <div class="col col-sm-2 data-horizontal-center">比較</div> 
+            <div class="col col-sm-1">其他數值</div>
+            <div class="col col-sm-1">
+                <span class="add-attr-span">OP</span>
+                <a href="#" data-toggle="tooltip" title="Delete ALL history" id="del-all-histories-btn">
+                    <img src="img/x2_mark.png" width="18px" height="18px"/>
+                </a>
+            </div>
+        </div>
+        <div id="rs-history">
+        </div>
+    </div>
+    <nav class="navbar navbar-light bg-light foot-bar">
+    <div></div>
+        <div><span>© kigipaul</span></div>
+    </nav>
+    <script src="https://code.jquery.com/jquery-3.4.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="js/clipboard.min.js"></script>
+    <script src="js/datacode.js"></script>
+    <script src="js/papa.js"></script>
+    <script>
+var ItemID_list = [];
+var ItemClass = {
+    arms: {
+    },
+    equipment: {
+        clothes: [],
+        pants: [],
+        shoulder: [],
+        waist: [],
+        shoes: []
+    },
+    accessories: {
+        necklace: [],
+        wristband: [],
+        ring: []
+    },
+    decoration: {
+        assist: [],
+        stone: [],
+        earring: []
+    },
+    set: []
+}
+var ActiveSet = {
+    equipment: [],
+    accessories: [],
+    decoration: []
+};
+var AddAttrValue = {};
+var defaultStatusValue = {
+            str: 500,
+            int: 500,
+            vit: 500,
+            mag: 500,
+            phy_atk: 213,
+            mag_atk: 213,
+            fix_atk: 71,
+            speed_atk: 10,
+            speed_cast: 10,
+            speed_move: 10,
+            attr_fire: 13,
+            attr_water: 13,
+            attr_light: 13,
+            attr_dark: 13
+}
+var EqType95Value = {
+    "1" : {
+        "clothes":  { str: 0, int: 56, vit: 0, mag: 56 },
+        "shoulder": { str: 0, int: 45, vit: 0, mag: 45 },
+        "pants": { str: 0, int: 56, vit: 0, mag: 56 },
+        "waist": { str: 0, int: 33, vit: 0, mag: 33 },
+        "shoes": { str: 0, int: 33, vit: 0, mag: 33 }
+    },
+    "2" : {
+        "clothes":  { str: 46, int: 46, vit: 0, mag: 52 },
+        "shoulder": { str: 37, int: 37, vit: 0, mag: 41 },
+        "pants": { str: 46, int: 46, vit: 0, mag: 52 },
+        "waist": { str: 28, int: 28, vit: 0, mag: 31 },
+        "shoes": { str: 28, int: 28, vit: 0, mag: 31 }
+    },
+    "3" : {
+        "clothes":  { str: 56, int: 37, vit: 0, mag: 0 },
+        "shoulder": { str: 45, int: 30, vit: 0, mag: 0 },
+        "pants": { str: 56, int: 37, vit: 0, mag: 0 },
+        "waist": { str: 33, int: 22, vit: 0, mag: 0 },
+        "shoes": { str: 33, int: 22, vit: 0, mag: 0 }
+    },
+    "4" : {
+        "clothes":  { str: 52, int: 37, vit: 46, mag: 0 },
+        "shoulder": { str: 41, int: 30, vit: 31, mag: 0 },
+        "pants": { str: 52, int: 37, vit: 46, mag: 0 },
+        "waist": { str: 31, int: 22, vit: 28, mag: 0 },
+        "shoes": { str: 31, int: 22, vit: 28, mag: 0 }
+    },
+    "5" : {
+        "clothes":  { str: 46, int: 46, vit: 52, mag: 0 },
+        "shoulder": { str: 37, int: 37, vit: 41, mag: 0 },
+        "pants": { str: 46, int: 46, vit: 52, mag: 0 },
+        "waist": { str: 28, int: 28, vit: 31, mag: 0 },
+        "shoes": { str: 28, int: 28, vit: 31, mag: 0 }
+    },
+}
+var CompareTargetDataCode = "";
+var CompareTargetOtherValue = {};
+$(function() {
+    // Load Google doc. data
+    loadData();
+    // Assign default value
+    setStatusValue();
+    // Enable tooltip
+    $('[data-toggle="tooltip"]').tooltip();   
+    // Enable copy data code
+    var clipboard = new ClipboardJS('#copy-data-code');
+    clipboard.on('success', function(e) {
+        e.clearSelection();
+        console.info('Action:',e.action, ',Text:', e.text);
+        org_text = "Copy to clipboard";
+        $('#copy-data-code').attr("data-original-title", "Copied");
+        $('#copy-data-code').tooltip("update");
+        $('#copy-data-code').tooltip("show");
+        setTimeout(function(){
+            $('#copy-data-code').attr("data-original-title", org_text);
+            $('#copy-data-code').tooltip("update");
+            $('#copy-data-code').tooltip("hide");
+        },2000);
+    });
+    clipboard.on('error', function(e) {
+        console.error('Action:', e.action);
+        console.error('Trigger:', e.trigger);
+    });
+    // Init data code handler
+    var datacode = new DataCode('.data-code-target');
+    $("#data-code").val(datacode.generateDataCode());
+    $("#data-code").attr("pattern", datacode.encodeBaseString);
+    // Init custom element event
+    $('body').on('click', ".dropdown-item", function(){
+        var menu_id = $(this).parent().attr("parent-id");
+        img_src = "img/x_mark.png";
+        tip_text = "なし";
+        if($(this).attr("value") != "0"){
+            img_src = $(this).attr('data-img-url');
+            if(img_src){
+                tip_text = $(this).text();
+            } else {
+                img_src = "img/x_mark.png";
+            }           
+        }
+        _updateEquipDisplay("#"+menu_id, this, img_src, tip_text);
+        checkSet();
+        $("#data-code").val(datacode.generateDataCode());
+    })
+    .on('change', ".status-all", function(){
+        $("#data-code").val(datacode.generateDataCode());
+    })
+    .on('click', "#load-data-code", function(){
+        loadDataCode(datacode, $("#data-code").val());        
+    })
+    .on('click', "#btn-calc", function(){
+        if (CompareTargetDataCode == $("#data-code").val()){
+            alert("Already Calc");
+            return;
+        } else {
+            CompareTargetDataCode = $("#data-code").val();
+            CompareTargetOtherValue = {};
+        }
+        cleanAllAttrValue();
+        var ck = checkStatusValue();
+        migrateEquipAttr();
+        var get_rs = addIntDigit(calcAttrValue());        
+        $("#result").text(get_rs);
+        var get_other_rs = calcOtherAttrValue();        
+        insertCompareTarget();
+        compareHistoryValue();
+    })
+    .on('focusout', '#data-code', function(){
+        if(!datacode.checkDataCode($(this).val()) || $(this).val() == ""){
+            $('#data-code').val(datacode.generateDataCode());
+            alert('Data Code Invalid!!');
+        }
+    })                   
+    .on('click', '#del-all-histories-btn', function(){         
+        cleanAllHistories();
+        $(this).trigger('focusout');
+    })
+    .on('click', '.history-load-btn', function(){        
+        var code = $(this).parent().parent().attr('datacode');
+        if (!code){
+            console.error('Load history error: miss data code');
+            return;
+        }
+        loadDataCode(datacode, code);
+        $("#data-code").val(code);
+    })
+    .on('click', '.history-del-btn', function(){        
+        $(this).parent().parent().remove();
+    })
+    .on('mouseover', '.compare-other-value', function(){
+        if($(this).find('.compare-other-value-div-compared').html()){
+            $(this).find('.compare-other-value-div').hide();
+            $(this).find('.compare-other-value-div-compared').show();
+        }
+    })
+    .on('mouseout', '.compare-other-value', function(){
+        if($(this).find('.compare-other-value-div').html()!='<div></div><div></div>'){        
+            $(this).find('.compare-other-value-div').show();
+            $(this).find('.compare-other-value-div-compared').hide();
+        }
+    });
+});
+function loadData() {
+    var url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQbHeha0mdNwxZGaAOz5SQV2eXAQjE1zPJMrvs8cHeCfi5Pz0qdfp3WO57O4IMgdlZYoXCapE-fasfa/pub?output=csv";
+    $.ajax({
+        type: "GET",
+        url: url,
+        success: parseDB
+    });
+}
+function loadDataCode(DC,datacode) {
+    DC.parseDataCode(datacode);
+    var elem_char_type = $('#character-type');
+    var elem_target_char_type = $('#sl-character-type').find('[value="'+elem_char_type.val()+'"]');
+    _updateEquipDisplay('#character-type', elem_target_char_type, elem_target_char_type.attr("data-img-url"), elem_target_char_type.text());
+    var elem_char_type = $('#equip-type');
+    var elem_target_char_type = $('#sl-equip-type').find('[value="'+elem_char_type.val()+'"]');
+    _updateEquipDisplay('#equip-type', elem_target_char_type, elem_target_char_type.attr("data-img-url"), elem_target_char_type.text());
+    updateEquipsDisplay();
+    checkSet();
+}
+function addIntDigit (i){
+    get_rs = (Math.round(i * 100) / 100).toString();
+    var pre_rs = get_rs.split(".")[0];
+    var pre_rs_count = 0;
+    var rs = "";
+    for(var i = pre_rs.length - 1; i >= 0; i--){
+        if(i != 0 && pre_rs_count % 3 == 2){
+            rs = "," + pre_rs[i] + rs;
+        } else {
+            rs = pre_rs[i] + rs;
+        }
+        pre_rs_count++;
+    }
+    rs = rs + "." + (get_rs.split(".")[1] || "00");
+    return rs;
+}
+function setStatusValue(){
+   $('.status-all').each(function(){
+       if($(this).val() == ""){
+           var status_key = $(this).attr('id').replace('status-','');
+           $(this).val(defaultStatusValue[status_key]);
+       }
+   });
+}
+function parseDB(data) {
+    var csv_data = Papa.parse(data);
+    count = 0;
+    csv_data.data.forEach(function(e){
+        if(count < 2){
+            count += 1;
+            return;
+        }
+        item = generalItemData(e);
+        if(!ItemID_list.hasOwnProperty(item["id"])) {
+            ItemID_list[item["id"]] = item;
+            if (item["kind"] == "防具"){
+                if(item["part"] == "上"){
+                    ItemClass.equipment.clothes.push(simpleItemData(item));
+                } else if(item["part"] == "肩"){
+                    ItemClass.equipment.shoulder.push(simpleItemData(item));
+                } else if(item["part"] == "褲"){
+                    ItemClass.equipment.pants.push(simpleItemData(item));
+                } else if(item["part"] == "腰"){
+                    ItemClass.equipment.waist.push(simpleItemData(item));
+                } else if(item["part"] == "靴"){
+                    ItemClass.equipment.shoes.push(simpleItemData(item));
+                } else if(item["type"] == "套裝"){
+                    d = simpleItemData(item);
+                    d.setNum = item["part"];
+                    ItemClass.set.push(d);
+                }
+            } else if (item["kind"] == "飾品"){
+                if(item["type"] == "項鍊"){
+                    ItemClass.accessories.necklace.push(simpleItemData(item));
+                } else if(item["type"] == "腕輪"){
+                    ItemClass.accessories.wristband.push(simpleItemData(item));
+                } else if(item["type"] == "指輪"){
+                    ItemClass.accessories.ring.push(simpleItemData(item));
+                } else if(item["type"] == "套裝"){
+                    d = simpleItemData(item);
+                    ItemClass.set.push(d);
+                }
+            } else if (item["kind"] == "特裝"){
+                if(item["type"] == "輔助"){
+                    ItemClass.decoration.assist.push(simpleItemData(item));
+                } else if(item["type"] == "魔法石"){
+                    ItemClass.decoration.stone.push(simpleItemData(item));
+                } else if(item["type"] == "耳環"){
+                    ItemClass.decoration.earring.push(simpleItemData(item));
+                } else if(item["type"] == "套裝"){
+                    d = simpleItemData(item);
+                    ItemClass.set.push(d);
+                }
+            }
+        }
+    });
+    console.log(ItemClass);
+    console.log(ItemID_list);
+    generalSelectOption();
+}
+function generalSelectOption(){
+    ItemClass.equipment.clothes.forEach(function(simple_item){
+        var html = generalSelectOptionHtml(simple_item, true);
+        $("#sl-eq-clothes").append(html);
+    });
+    ItemClass.equipment.shoulder.forEach(function(simple_item){
+        var html = generalSelectOptionHtml(simple_item, true);
+        $("#sl-eq-shoulder").append(html);
+    });
+    ItemClass.equipment.pants.forEach(function(simple_item){
+        var html = generalSelectOptionHtml(simple_item, true);
+        $("#sl-eq-pants").append(html);
+    });
+    ItemClass.equipment.waist.forEach(function(simple_item){
+        var html = generalSelectOptionHtml(simple_item, true);
+        $("#sl-eq-waist").append(html);
+    });
+    ItemClass.equipment.shoes.forEach(function(simple_item){
+        var html = generalSelectOptionHtml(simple_item, true);
+        $("#sl-eq-shoes").append(html);
+    });
+    ItemClass.accessories.necklace.forEach(function(simple_item){
+        var html = generalSelectOptionHtml(simple_item, false);
+        $("#sl-ac-necklace").append(html);
+    });
+    ItemClass.accessories.wristband.forEach(function(simple_item){
+        var html = generalSelectOptionHtml(simple_item, false);
+        $("#sl-ac-wristband").append(html);
+    });
+    ItemClass.accessories.ring.forEach(function(simple_item){
+        var html = generalSelectOptionHtml(simple_item, false);
+        $("#sl-ac-ring").append(html);
+    });
+    ItemClass.decoration.assist.forEach(function(simple_item){
+        var html = generalSelectOptionHtml(simple_item, false);
+        $("#sl-dec-assist").append(html);
+    });
+    ItemClass.decoration.stone.forEach(function(simple_item){
+        var html = generalSelectOptionHtml(simple_item, false);
+        $("#sl-dec-stone").append(html);
+    });
+    ItemClass.decoration.earring.forEach(function(simple_item){
+        var html = generalSelectOptionHtml(simple_item, false);
+        $("#sl-dec-earring").append(html);
+    });
+}
+function generalSelectOptionHtml(data, show_part){
+    var value = 'value="' + data.id + '"';
+    var display_name = data.iLv+'-';
+    if(show_part){
+        display_name += '['+data.part+']-'
+    }
+    display_name += data.name;
+    var html = '<a class="dropdown-item" href="#" '+ value +' data-img-url="'+data.pic+'">' + display_name + '</a>';
+    return html
+}
+
+function simpleItemData(data){
+    var set_num = 0;
+    if (data["setName"] != ""){
+        if (data["type"] == "套裝"){
+            set_num = data["part"];
+        } else {
+            set_num = 1;
+        }
+    }
+    return {
+        id: data["id"],
+        iLv: data["iLv"],
+        pic: data["pic"],
+        name: data["name"],
+        part: data["part"],
+        setName: data["setName"],
+        setNum: set_num,
+        quality: data["quality"]
+    }
+}
+function generalItemData(data) {
+    var title_list = [
+            "id",
+            "iLv",
+            "iVersion",
+            "pic",
+            "name",
+            "setName",
+            "type",
+            "part",
+            "kind",
+            "quality",
+            "basic:str",
+            "basic:int",
+            "basic:vit",
+            "basic:mag",
+            "attr:phy_atk",
+            "attr:mag_atk",
+            "attr:fix_atk",
+            "attr:p-str",
+            "attr:p-int",
+            "attr:p-vit",
+            "attr:p-mag",
+            "attr:p-phy_atk",
+            "attr:p_mag_atk",
+            "attr:p-fix_atk",
+            "attr:attr_fire",
+            "attr:attr_water",
+            "attr:attr_light",
+            "attr:attr_dark",
+            "attr:attr_all",
+            "attr:inc_damage",
+            "attr:add_inc_damage",
+            "attr:cri_damage",
+            "attr:add_cri_damage",
+            "attr:add_damage",
+            "attr:add_attr_damage",
+            "attr:all_damage",
+            "attr:skill_damage",
+            "attr:p-dec_def",
+            "attr:p-cri",
+            "attr:skill",
+            "sup:skill",
+            "attr:speed_atk",
+            "attr:speed_cast",
+            "attr:speed_move",
+            "attr:tyrant",
+            "attr:aura",
+            "attr:abnormal_damage",
+            "attr:p-abnormal_damage",
+            "attr:other",
+            "sup:atkBuff_lv:m_kuruse",
+            "sup:atkBuff_str:m_kuruse",
+            "sup:atkBuff_int:m_kuruse",
+            "sup:atkBuff_p-str:m_kuruse",
+            "sup:atkBuff_p-int:m_kuruse",
+            "sup:atkBuff_phy_atk:m_kuruse",
+            "sup:atkBuff_mag_atk:m_kuruse",
+            "sup:atkBuff_fix_atk:m_kuruse",
+            "sup:atkBuff_p-phy_atk:m_kuruse",
+            "sup:atkBuff_p-mag_atk:m_kuruse",
+            "sup:atkBuff_p-fix_atk:m_kuruse",
+            "sup:passive:m_kuruse",
+            "sup:abokari_lv:m_kuruse",
+            "sup:abokari_str:m_kuruse",
+            "sup:abokari_int:m_kuruse",
+            "sup:abokari_p-str:m_kuruse",
+            "sup:abokari_p-int:m_kuruse",
+            "sup:abokari_phy_atk:m_kuruse",
+            "sup:abokari_mag_atk:m_kuruse",
+            "sup:abokari_fix_atk:m_kuruse",
+            "sup:abokari_p-phy_atk:m_kuruse",
+            "sup:abokari_p-mag_atk:m_kuruse",
+            "sup:abokari_p-fix_atk:m_kuruse",
+            "sup:other:m_kuruse",
+            "sup:atkBuff_lv:f_kuruse",
+            "sup:atkBuff_str:f_kuruse",
+            "sup:atkBuff_int:f_kuruse",
+            "sup:atkBuff_p-str:f_kuruse",
+            "sup:atkBuff_p-int:f_kuruse",
+            "sup:atkBuff_phy_atk:f_kuruse",
+            "sup:atkBuff_mag_atk:f_kuruse",
+            "sup:atkBuff_fix_atk:f_kuruse",
+            "sup:atkBuff_p-phy_atk:f_kuruse",
+            "sup:atkBuff_p-mag_atk:f_kuruse",
+            "sup:atkBuff_p-fix_atk:f_kuruse",
+            "sup:passive:f_kuruse",
+            "sup:abokari_lv:f_kuruse",
+            "sup:abokari_str:f_kuruse",
+            "sup:abokari_int:f_kuruse",
+            "sup:abokari_p-str:f_kuruse",
+            "sup:abokari_p-int:f_kuruse",
+            "sup:abokari_phy_atk:f_kuruse",
+            "sup:abokari_mag_atk:f_kuruse",
+            "sup:abokari_fix_atk:f_kuruse",
+            "sup:abokari_p-phy_atk:f_kuruse",
+            "sup:abokari_p-mag_atk:f_kuruse",
+            "sup:abokari_p-fix_atk:f_kuruse",
+            "sup:other:f_kuruse"
+    ];
+    var item_obj = {};
+    for (var i=0;i<title_list.length;i++){
+        var val = "";
+        if(data.length > i) {
+            if(title_list[i] == "pic"){
+                if(data[i] == "" || data[i] == "0" || data[i] == 0){
+                    val = "img/q_mark.png";
+                } else {
+                    val = "img/id_" + data[i] + ".png";
+                }
+            } else {
+                val = data[i];
+            }
+        }
+        title = title_list[i];
+        ts = title.split(":");
+        if ( ts.length > 1 ) {
+            if ( ts.length > 3) {
+                if (!item_obj.hasOwnProperty(ts[0])) {
+                    item_obj[ts[0]] = {};
+                }
+                if (!item_obj[ts[0]].hasOwnProperty(ts[1])) {
+                    item_obj[ts[0]][ts[1]] = {};
+                }
+                if (!item_obj[ts[1]].hasOwnProperty(ts[2])) {
+                    item_obj[ts[0]][ts[1]][ts[2]] = {};
+                }
+                item_obj[ts[0]][ts[1]][ts[2]][ts[3]] = val;
+            } else if ( ts.length > 2) {
+                if (!item_obj.hasOwnProperty(ts[0])) {
+                    item_obj[ts[0]] = {};
+                }
+                if (!item_obj[ts[0]].hasOwnProperty(ts[1])) {
+                    item_obj[ts[0]][ts[1]] = {};
+                }
+                item_obj[ts[0]][ts[1]][ts[2]] = val;
+            } else {
+                if (!item_obj.hasOwnProperty(ts[0])) {
+                    item_obj[ts[0]] = {};
+                }
+                item_obj[ts[0]][ts[1]] = val;
+            }
+        } else {
+            item_obj[ts[0]] = val;
+        }
+    }
+    return item_obj;
+}
+function displayBasicData(e) {
+    var d_status = $(e).attr("status");
+    var target_id = $(e).attr("target-div");
+    if (d_status == "true"){
+        $("#" + target_id).slideUp(200);
+        $(e).attr("status", "false");
+        $(e).css("background-image", "url(img/packup.png)");
+    } else if (d_status == "false"){
+        $("#" + target_id).slideDown(200);
+        $(e).attr("status", "true");
+        $(e).css("background-image", "url(img/extend.png)");
+    }
+}
+function _updateEquipDisplay(target, target_item, img, text) {
+    var btn_style = 'background: url('+img+');background-position: -0px -0px;background-repeat: no-repeat;background-size: 40px 40px;';
+    $(target).attr("style", btn_style);
+    $(target).attr("value", $(target_item).attr("value"));
+    $(target).attr("data-original-title", text);
+    $(target_item).parent().find(".dropdown-item").css("background-color", "");
+    $(target_item).parent().find(".dropdown-item").css("color", "");
+    $(target_item).css("background-color", "#28A745");
+    $(target_item).css("color", "white");
+}
+function checkSet() {
+    checkSetEq();
+    checkSetAc();
+    checkSetDec();
+    generateSet();
+}
+function checkSetEq() {
+    var clothes_id = $("#menu-eq-clothes").attr("value");
+    var shoulder_id = $("#menu-eq-shoulder").attr("value");
+    var pants_id = $("#menu-eq-pants").attr("value");
+    var waist_id = $("#menu-eq-waist").attr("value");
+    var shoes_id = $("#menu-eq-shoes").attr("value");
+    var id_list = [clothes_id, shoulder_id, pants_id, waist_id, shoes_id];
+    ActiveSet.equipment = _checkSet(id_list);
+}
+function checkSetAc() {
+    var necklace_id = $("#menu-ac-necklace").attr("value");
+    var ring_id = $("#menu-ac-ring").attr("value");
+    var wristband_id = $("#menu-ac-wristband").attr("value");
+    var id_list = [necklace_id, ring_id, wristband_id];
+    ActiveSet.accessories = _checkSet(id_list);
+}
+function checkSetDec() {
+    var stone_id = $("#menu-dec-stone").attr("value");
+    var assist_id = $("#menu-dec-assist").attr("value");
+    var earring_id = $("#menu-dec-earring").attr("value");
+    var id_list = [stone_id, assist_id, earring_id];
+    ActiveSet.decoration = _checkSet(id_list);
+}
+function _checkSet(id_list) {
+    var set_list = {};
+    var rs_set = [];
+    for(var i = 0;i < id_list.length; i++){
+        var iid = id_list[i];
+        if(iid && iid != "0"){
+            var setName = ItemID_list[iid].setName;
+            if(!set_list.hasOwnProperty(setName)){
+               set_list[setName] = 1;
+            } else {
+               set_list[setName]++;
+            }
+        }
+    }
+    for(var i = 0;i < ItemClass.set.length; i++){
+        var set = ItemClass.set[i];
+        if(set_list.hasOwnProperty(set.setName)){
+            if(set_list[set.setName] >= set.setNum){
+                rs_set.push({"id": set.id, "setName": set.setName, "setNum":set.setNum, "pic": set.pic});
+            }
+        }
+    }
+    return rs_set;
+}
+function generateSet(){
+    $("#eq-set-list").html("");
+    ActiveSet.equipment.forEach(function(e){
+        _generateSetElement("equip", e);
+    });
+    ActiveSet.accessories.forEach(function(e){
+        _generateSetElement("ac", e);
+    });
+    ActiveSet.decoration.forEach(function(e){
+        _generateSetElement("dec", e);
+    });
+    $("#eq-set-list").find("button").tooltip();
+}
+function _generateSetElement(set_type, set_data) {
+    var st = 'btn-light';
+    if(set_type == "equip"){
+        st = 'btn-warning';
+    } else if (set_type == "ac"){
+        st = 'btn-info';
+    } else if (set_type == "dec"){
+        st = 'btn-success';
+    }
+    var classes = 'btn '+ st +' div-set display-item-btn equip-all';
+    var value = set_data.id;
+    var name = set_data.setName + '['+set_data.setNum+']';
+    var style = "background:url('"+set_data.pic+"');";
+    var html = '<button class="'+classes+'" type="button" data-placement="top" data-original-title="'+name+'" value="'+value+'" style="'+style+'"></button>';
+    $('#eq-set-list').append(html);
+}
+function updateEquipsDisplay() {
+    $(".equip-all").each(function(){
+        if($(this).attr("value") == "0"){
+            return;
+        }
+        var value = $(this).attr("value");
+        var img_src = ItemID_list[value]["pic"];
+        var target_menu = $(this).parent().find('[parent-id="'+$(this).attr("id")+'"]');
+        var target_item = $(target_menu).find('[value="'+value+'"]');
+        var tip_text = $(target_item).text();
+        console.log("Load Equip", value, tip_text);
+        _updateEquipDisplay(this, target_item, img_src, tip_text);
+    });
+}
+function checkStatusValue(){
+   var rs = true;
+   $('.status-all').each(function(){
+       if($(this).val() == ""){
+           var status_key = $(this).attr('id').replace('status-','');
+           $(this).val(defaultStatusValue[status_key]);
+       }
+       if($(this).is(':out-of-range')){
+           rs = false;
+       }
+   });
+   return rs;
+}
+function assignAddAttrValue(key, val){
+    if(val){
+        $("#add-attr-"+key).text(val);
+    }
+    $("#add-attr-"+key).parent().parent().removeClass('add-attr-disable');
+}
+function _getItemAttrValue(value, val_type='int'){
+    if(val_type == 'str'){
+        if(val_type == ""){
+            return value;
+        } else {
+            return value + "\n";
+        }
+    } else if (val_type == 'int'){
+        if(value == ""){
+            return 0;
+        }
+        var pval = parseInt(value);
+        if (!pval) {
+            return 0;
+        }
+        return pval;
+    }
+}
+function migrateEquipAttr(){
+    var addAttrValue = {
+        character_type: 1,
+        direct_damage: {
+                str: 0,
+                int: 0,
+                vit: 0,
+                mag: 0,
+                phy_atk: 0,
+                mag_atk: 0,
+                fix_atk: 0,
+                p_str: 0,
+                p_int: 0,
+                p_phy_atk: 0,
+                p_mag_atk: 0,
+                p_fix_atk: 0,
+                attr_fire: 0,
+                attr_water: 0,
+                attr_light: 0,
+                attr_dark: 0,
+                attr_all: 0,
+                inc_damage: 0,
+                add_inc_damage: 0,
+                cri_damage: 0,
+                add_cri_damage: 0,
+                add_damage: 0,
+                add_attr_damage: 0,
+                all_damage: 0,
+                skill_damage: 1
+        },
+        other_damage: {
+                p_dec_def: 0,
+                p_cri: 0,
+                skill: "",
+                speed_atk: 0,
+                speed_cast: 0,
+                speed_move: 0,
+                tyrant: "",
+                aura: "",
+                abnormal_damage: "",
+                p_abnormal_damage: 0,
+                other: "",
+        }
+    }
+    var char_type = $('#character-type').val();
+    if(!char_type || !/^[1-5]$/.test(char_type)){
+        char_type = 1;
+    } else {
+        char_type = parseInt(char_type);
+    }
+    addAttrValue.character_type = char_type;
+    var eq_type = $('#equip-type').val();    
+    $('.equip-all').each(function(){
+        var item_id = $(this).attr("value");
+        if(!item_id || item_id == "0"){
+            return;
+        }
+        var item = ItemID_list[item_id];
+        if (item.iLv == "95" && item.kind == "防具" && item.type != "套裝"){
+            var part_key = "";
+            if(item.part == "上") {
+                part_key = "clothes";
+            } else if(item.part == "肩") {
+                part_key = "shoulder";
+            } else if (item.part == "褲"){
+                part_key = "pants";
+            } else if (item.part == "腰"){
+                part_key = "waist";
+            } else if (item.part == "靴"){
+                part_key = "shoes";
+            }  
+            addAttrValue.direct_damage.str += EqType95Value[eq_type][part_key].str;
+            addAttrValue.direct_damage.int += EqType95Value[eq_type][part_key].int;
+            addAttrValue.direct_damage.vit += EqType95Value[eq_type][part_key].vit;
+            addAttrValue.direct_damage.mag += EqType95Value[eq_type][part_key].mag;
+        } else {
+            addAttrValue.direct_damage.str += _getItemAttrValue(item.basic.str);
+            addAttrValue.direct_damage.int += _getItemAttrValue(item.basic.int);
+            addAttrValue.direct_damage.vit += _getItemAttrValue(item.basic.vit);
+            addAttrValue.direct_damage.mag += _getItemAttrValue(item.basic.mag);
+        }
+        addAttrValue.direct_damage.phy_atk += _getItemAttrValue(item.attr["phy_atk"]);
+        addAttrValue.direct_damage.mag_atk += _getItemAttrValue(item.attr["mag_atk"]);
+        addAttrValue.direct_damage.fix_atk += _getItemAttrValue(item.attr["fix_atk"]);
+        addAttrValue.direct_damage.p_str += _getItemAttrValue(item.attr["p-str"]);
+        addAttrValue.direct_damage.p_int += _getItemAttrValue(item.attr["p-int"]);
+        addAttrValue.direct_damage.p_phy_atk += _getItemAttrValue(item.attr["p-phy_atk"]);
+        addAttrValue.direct_damage.p_mag_atk += _getItemAttrValue(item.attr["p-mag_atk"]);
+        addAttrValue.direct_damage.p_fix_atk += _getItemAttrValue(item.attr["p-fix_atk"]);
+        addAttrValue.direct_damage.attr_fire += _getItemAttrValue(item.attr["attr_fire"]);
+        addAttrValue.direct_damage.attr_water += _getItemAttrValue(item.attr["attr_water"]);
+        addAttrValue.direct_damage.attr_light += _getItemAttrValue(item.attr["attr_light"]);
+        addAttrValue.direct_damage.attr_dark += _getItemAttrValue(item.attr["attr_dark"]);
+        addAttrValue.direct_damage.attr_all += _getItemAttrValue(item.attr["attr_all"]);
+        addAttrValue.direct_damage.add_inc_damage += _getItemAttrValue(item.attr["add_inc_damage"]);
+        addAttrValue.direct_damage.add_cri_damage += _getItemAttrValue(item.attr["add_cri_damage"]);
+        addAttrValue.direct_damage.add_damage += _getItemAttrValue(item.attr["add_damage"]);
+        addAttrValue.direct_damage.add_attr_damage += _getItemAttrValue(item.attr["add_attr_damage"]);
+        addAttrValue.direct_damage.all_damage += _getItemAttrValue(item.attr["all_damage"]);
+        var inc_damage = _getItemAttrValue(item.attr["inc_damage"]);
+        if(inc_damage > addAttrValue.direct_damage.inc_damage){
+            addAttrValue.direct_damage.inc_damage = inc_damage;
+        }
+        var cri_damage = _getItemAttrValue(item.attr["cri_damage"]);
+        if(cri_damage > addAttrValue.direct_damage.cri_damage){
+            addAttrValue.direct_damage.cri_damage = cri_damage;
+        }
+        var skill_damage = _getItemAttrValue(item.attr["skill_damage"]);
+        var org_skill_damage = addAttrValue.direct_damage.skill_damage;        
+        if(org_skill_damage == 1  && skill_damage > 0){
+            addAttrValue.direct_damage.skill_damage = (1 + skill_damage/100);
+            console.log("skill_damage", item.name, skill_damage, org_skill_damage);
+        } else if (org_skill_damage > 0 && skill_damage > 0){
+            var skill_rs = org_skill_damage * (1 + skill_damage/100);
+            addAttrValue.direct_damage.skill_damage = (Math.round(skill_rs * 1000) / 1000);
+            console.log("skill_damage", item.name, skill_damage, org_skill_damage, skill_rs, Math.round(skill_rs * 1000), (Math.round(skill_rs * 1000) / 1000));
+        }        
+        var p_dec_def = _getItemAttrValue(item.attr["p-dec_def"]);
+        var org_p_dec_def = addAttrValue.other_damage.p_dec_def;
+        if(org_p_dec_def + p_dec_def >= 25){
+            addAttrValue.other_damage.p_dec_def = 25;
+        } else {
+            addAttrValue.other_damage.p_dec_def += p_dec_def;
+        }
+        addAttrValue.other_damage.p_cri += _getItemAttrValue(item.attr['p-cri']);
+        addAttrValue.other_damage.speed_atk += _getItemAttrValue(item.attr['speed_atk']);
+        addAttrValue.other_damage.speed_cast += _getItemAttrValue(item.attr['speed_cast']);
+        addAttrValue.other_damage.speed_move += _getItemAttrValue(item.attr['speed_move']);
+        addAttrValue.other_damage.p_abnormal_damage += _getItemAttrValue(item.attr['p_abnormal_damage']);
+        addAttrValue.other_damage.abnormal_damage += _getItemAttrValue(item.attr['abnormal_damage'], 'str');
+        addAttrValue.other_damage.tyrant += _getItemAttrValue(item.attr['tyrant'], 'str');
+        addAttrValue.other_damage.aura += _getItemAttrValue(item.attr['aura'], 'str');
+        addAttrValue.other_damage.other += _getItemAttrValue(item.attr['other'], 'str');
+        var skill_len = 18;
+        var skill = item.attr["skill"];
+        var org_skill = addAttrValue.other_damage.skill;
+        if(org_skill == ""){
+            addAttrValue.other_damage.skill = skill;
+        } else if (skill != ""){
+            var new_skill = (BigInt(org_skill) + BigInt(skill)).toString(16);
+            while (new_skill.length < skill_len) { new_skill = '0' + new_skill; }
+            addAttrValue.other_damage.skill = '0x' + new_skill;
+        }
+    });
+    AddAttrValue = $.extend(true, {}, addAttrValue);
+    console.log("Migrate Equip Type", eq_type);
+    console.log("Migrate Attr Value", AddAttrValue);
+}
+function cleanAllAttrValue() {
+    $('.add-attr-div').addClass('add-attr-disable');
+    $('.add-attr-span').find('span').text("0");
+    $('.add-attr-skill-item').remove();
+    setAttrValueSkillLength(0);
+}
+function setAttrValueSkillLength(num) {
+    if(num < 1){
+        num = 1;
+    }
+    var reg_class = /^col-md-[1-9]$/;
+    var get_class = $("#add-attr-skill").parent().attr("class").split(" ");
+    var rm_class_list = [];
+    get_class.forEach(function(c){
+        if(reg_class.test(c)){
+            rm_class_list.push(c);
+        }
+    });
+    rm_class_list.forEach(function(c){
+        $("#add-attr-skill").parent().removeClass(c);
+    });
+    $("#add-attr-skill").parent().addClass('col-md-' + (num + 1));
+}
+function calcAttrValue() {
+    var rs = 0;
+    var statusValue = {
+            str: 500,
+            int: 500,
+            vit: 500,
+            mag: 500,
+            phy_atk: 213,
+            mag_atk: 213,
+            fix_atk: 71,
+            speed_atk: 10,
+            speed_cast: 10,
+            speed_move: 10,
+            attr_fire: 13,
+            attr_water: 13,
+            attr_light: 13,
+            attr_dark: 13
+    }
+    statusValue.str = parseInt($("#status-str").val());
+    statusValue.int = parseInt($("#status-int").val());    
+    statusValue.vit = parseInt($("#status-vit").val());
+    statusValue.mag = parseInt($("#status-mag").val());
+    statusValue.phy_atk = parseInt($("#status-phy_atk").val());
+    statusValue.mag_atk = parseInt($("#status-mag_atk").val());
+    statusValue.fix_atk = parseInt($("#status-fix_atk").val());
+    statusValue.speed_atk = parseInt($("#status-speed_atk").val());
+    statusValue.speed_cast = parseInt($("#status-speed_cast").val());
+    statusValue.speed_move = parseInt($("#status-speed_move").val());
+    statusValue.attr_fire = parseInt($("#status-attr_fire").val());
+    statusValue.attr_water = parseInt($("#status-attr_water").val());
+    statusValue.attr_light = parseInt($("#status-attr_light").val());
+    statusValue.attr_dark = parseInt($("#status-attr_dark").val());
+    var char_type = AddAttrValue.character_type;    
+    var key_basic_attr = "";
+    var key_basic_atk = "";
+    var attr_x_val = 250;
+    var is_fix_atk = false;
+    if(char_type == 1){
+        key_basic_attr = "str";
+        key_basic_atk = "phy_atk";
+    } else if (char_type == 2){
+        key_basic_attr = "int";
+        key_basic_atk = "mag_atk";
+    } else if (char_type == 3){
+        key_basic_attr = "str";
+        key_basic_atk = "fix_atk";
+        attr_x_val = 166.25;
+        is_fix_atk = true;
+    } else if (char_type > 3){
+        key_basic_attr = "int";
+        key_basic_atk = "fix_atk";
+        attr_x_val = 166.25;
+        is_fix_atk = true;
+    }
+    var basic_atk = 71;
+    if(char_type == 1 || char_type == 2){
+        basic_atk = statusValue[key_basic_atk] / (1 + statusValue[key_basic_attr] / 250);
+    } else {
+        basic_atk = statusValue[key_basic_atk];
+    }
+    var main_attr = statusValue[key_basic_attr] + AddAttrValue.direct_damage[key_basic_attr];        
+    var p_main_attr = 1 + (is_fix_atk?1:0) + ((main_attr * (1 + AddAttrValue.direct_damage["p_"+key_basic_attr]/100)) / attr_x_val);
+    var atk = basic_atk + AddAttrValue.direct_damage[key_basic_atk];
+    var p_atk = 1 + AddAttrValue.direct_damage["p_"+key_basic_atk]/100;       
+    var target_element_val = 0;
+    var target_element_key = "";
+    var element_list = ['attr_fire', 'attr_water', 'attr_light', 'attr_dark'];
+    element_list.forEach(function(e){
+        var element_val = statusValue[e] + AddAttrValue.direct_damage[e];
+        if(element_val > target_element_val){
+            target_element_val = element_val;
+            target_element_key = e;
+        }
+    });
+    target_element_val += AddAttrValue.direct_damage.attr_all;
+    var element_damage = 1 + target_element_val / 220;
+    var inc_damage = 1 + (AddAttrValue.direct_damage.inc_damage + AddAttrValue.direct_damage.add_inc_damage) / 100;
+    var cri_damage = 1 + (AddAttrValue.direct_damage.cri_damage + AddAttrValue.direct_damage.add_cri_damage) / 100;        
+    var add_damage = 1 + AddAttrValue.direct_damage.add_damage / 100;
+    var add_attr_damage = 1 + ((1.05 + (target_element_val * 0.0045)) * AddAttrValue.direct_damage.add_attr_damage) / 100;
+    var all_damage = 1 + AddAttrValue.direct_damage.all_damage / 100;
+    var skill_damage = AddAttrValue.direct_damage.skill_damage;
+    var dec_def = 1 + AddAttrValue.other_damage.p_dec_def / 100;
+    rs = atk * p_atk * p_main_attr * element_damage * inc_damage * cri_damage * add_damage * add_attr_damage * all_damage * skill_damage * dec_def;
+    console.log("Calc | Main Attr: ", key_basic_attr, main_attr, p_main_attr);
+    console.log("Calc | Atk: ", key_basic_atk, basic_atk, atk, p_atk);   
+    console.log("Calc | Element: ", target_element_key, target_element_val, element_damage);
+    console.log("Calc | Inc/Cri damage: ", inc_damage, cri_damage);
+    console.log("Calc | Add (element) damage: ", add_damage, add_attr_damage);
+    console.log("Calc | All/Skill damage: ", all_damage, skill_damage);
+    console.log("Calc | dec def: ", dec_def);
+    console.log("Calc | Result: ", rs);
+    if(AddAttrValue.direct_damage[key_basic_attr]){
+        assignAddAttrValue(key_basic_attr, AddAttrValue.direct_damage[key_basic_attr]);
+    }
+    if(AddAttrValue.direct_damage["p_"+key_basic_attr]){
+        assignAddAttrValue("p_" + key_basic_attr, AddAttrValue.direct_damage["p_"+key_basic_attr]);
+    }
+    if(key_basic_atk == 'phy_atk' || key_basic_atk == 'mag_atk'){
+        if(AddAttrValue.direct_damage[key_basic_atk]){
+            assignAddAttrValue(key_basic_atk, AddAttrValue.direct_damage[key_basic_atk]);
+        }
+        if(AddAttrValue.direct_damage["p_"+key_basic_atk]){
+            assignAddAttrValue("p_"+key_basic_atk, AddAttrValue.direct_damage["p_"+key_basic_atk]);
+        }
+    } else {    
+        if(AddAttrValue.direct_damage["fix_atk"]){
+            assignAddAttrValue("fix_atk", AddAttrValue.direct_damage["fix_atk"]);
+        }
+        if(AddAttrValue.direct_damage["p_fix_atk"]){
+            assignAddAttrValue("p_fix_atk", AddAttrValue.direct_damage["p_fix_atk"]);
+        }
+        var target_attr_str = "";
+        if(key_basic_attr == "str"){
+            target_attr_str = "(物)";
+        } else if(key_basic_attr == "int"){
+            target_attr_str = "(魔)";
+        }        
+        $("#add-attr-target_fix_atk").text(target_attr_str);
+    }
+    if(target_element_val){
+        assignAddAttrValue(target_element_key, target_element_val);        
+    }
+    if(inc_damage > 1){
+        assignAddAttrValue("inc_damage", Math.round((inc_damage-1) * 100));
+    }
+    if(cri_damage > 1){
+        assignAddAttrValue("cri_damage", Math.round((cri_damage-1) * 100));
+    }
+    if(add_damage > 1){
+        assignAddAttrValue("add_damage", Math.round((add_damage-1) * 100));
+    }
+    if(AddAttrValue.direct_damage["add_attr_damage"]){
+        assignAddAttrValue("add_attr_damage", AddAttrValue.direct_damage["add_attr_damage"]);    
+        $('#add-attr-target_element').text("("+$("#add-attr-"+target_element_key).parent().parent().find('span.add-attr-label').text()+")");
+    }
+    if(all_damage > 1){
+        assignAddAttrValue("all_damage", Math.round((all_damage - 1) * 100));
+    }
+    if(skill_damage > 1){
+        assignAddAttrValue("skill_damage", Math.round((skill_damage - 1) * 10000) / 100);
+    }
+    return rs;
+}
+function _generalSkillString(s, op="+"){
+    var skill = "";
+    if(s.start != s.end){
+        skill += s.start + "~" + s.end;
+    } else {
+        skill += s.start;
+    }    
+    skill += " " + op + Math.abs(s.lv);
+    return skill;
+}
+function calcOtherAttrValue() {
+    var rs = 0;    
+    var attrValue = {              
+            cri: AddAttrValue.other_damage.p_cri,
+            speed_atk: AddAttrValue.other_damage.speed_atk,
+            speed_cast: AddAttrValue.other_damage.speed_cast,
+            speed_move: AddAttrValue.other_damage.speed_move,
+            skill: AddAttrValue.other_damage.skill
+    }
+    var char_type = AddAttrValue.character_type;        
+    var datacode = new DataCode("#add-attr-div");
+    if(attrValue.skill){
+        var skill_list = datacode.parseSkillCode(attrValue.skill);
+        skill_list.forEach(function(s){            
+            var html = '<span class="badge badge-sm badge-light add-attr-skill-item">'+_generalSkillString(s)+'</span>';
+            $("#add-attr-skill").append(html);
+        });
+        setAttrValueSkillLength(skill_list.length);
+        $("#add-attr-skill").find('span.add-attr-disable').removeClass('add-attr-disable');
+        CompareTargetOtherValue['skill'] = attrValue.skill;
+        CompareTargetOtherValue['skill_list'] = skill_list;
+    }    
+    var target_cri_key = "";
+    if(char_type == 1 || char_type == 3) {
+        target_cri_key = "(物)";
+    } else {
+        target_cri_key = "(魔)";
+    }
+    if(attrValue.speed_atk){
+        assignAddAttrValue("speed_atk", attrValue.speed_atk);
+        CompareTargetOtherValue['speed_atk'] = attrValue.speed_atk;
+    }
+    if(attrValue.speed_cast){
+        assignAddAttrValue("speed_cast", attrValue.speed_cast);
+        CompareTargetOtherValue['speed_cast'] = attrValue.speed_cast;
+    }
+    if(attrValue.speed_move){
+        assignAddAttrValue("speed_move", attrValue.speed_move);
+        CompareTargetOtherValue['speed_move'] = attrValue.speed_move;
+    }
+    if(attrValue.cri){
+        assignAddAttrValue("cri", attrValue.cri);    
+        $('#add-attr-target_cri').text(target_cri_key);
+        CompareTargetOtherValue['cri'] = attrValue.cri;
+    }
+    console.log("Calc | skill: ", attrValue.skill);
+    console.log("Calc | speed atk/cast/move: ", attrValue.speed_atk, attrValue.speed_cast, attrValue.speed_move);
+    console.log("Calc | cri: ", target_cri_key, attrValue.cri);
+}
+function cleanAllHistories(){
+    CompareTargetDataCode = "";
+    CompareTargetOtherValue = {};
+    $("#rs-history").html('');
+}
+function _cleanCompareValue(){
+    $('.history-target-row').find('.history-del-btn').removeClass('disable-links');
+    $('.history-target-row').addClass('history-row');
+    $('.history-target-row').removeClass('history-target-row');
+    $('.compare-performance-value-div').html('');
+    $('.compare-other-value-div-compared').html('');
+    $("#rs-history").find('[datacode="'+CompareTargetDataCode+'"]').remove();    
+    var get_histories = $('#rs-history').find('.history-row');    
+    if(get_histories.length > 15) {
+        get_histories.slice(-1).remove();
+    }
+}
+function _generalCompareEqImgHtml(elem){
+    var regex_img_url = /^.*url\((")?(.+?)(")?\).*$/;    
+    var iid = $(elem).val();
+    if(!iid || iid == "0"){
+        return '';
+    }
+    var pic_url = $(elem).css('background-image');
+    var pic = pic_url.match(regex_img_url)[2].replace(document.URL.match(/.*\//)[0], "");
+    var item_name = $(elem).attr('data-original-title');
+    if(!pic || !item_name){
+        console.error("generalCompareEqImgHtml miss pic or item_name");
+        return '';
+    }
+    var html = '<img class="history-img" src="'+ pic +'"  data-toggle="tooltip" data-placement="top" data-original-title="'+item_name+'" value="'+iid+'"/>';
+    return html;
+}
+function _generalHistoryOtherValueHtml(){
+    // History other value
+    var html_speed_atk = '';
+    if(CompareTargetOtherValue.hasOwnProperty('speed_atk')){
+        var speed_atk = CompareTargetOtherValue.speed_atk;
+        html_speed_atk = '<span class="badge badge-lg badge-light compare-attr-div">' + 
+            '<span class="add-attr-label">攻速</span><span class="history-attr-span">+<span class="history-attr-speed_atk">' + speed_atk+'</span>%</span></span>';
+    }
+    var html_speed_cast = '';
+    if(CompareTargetOtherValue.hasOwnProperty('speed_cast')){
+        html_speed_cast = '<span class="badge badge-lg badge-light compare-attr-div">' + 
+            '<span class="add-attr-label">ｷｬｽﾄ速</span><span class="history-attr-span">+<span class="history-attr-speed_cast">' + CompareTargetOtherValue['speed_cast']+'</span>%</span></span>';
+    }
+    var html_speed_move = '';
+    if(CompareTargetOtherValue.hasOwnProperty('speed_move')){
+        html_speed_move = '<span class="badge badge-lg badge-light compare-attr-div">' + 
+            '<span class="add-attr-label">移速</span><span class="history-attr-span">+<span class="history-attr-speed_move">' + CompareTargetOtherValue['speed_move']+'</span>%</span></span>';
+    }
+    var html_cri = '';
+    if(CompareTargetOtherValue.hasOwnProperty('cri')){
+        html_cri = '<span class="badge badge-lg badge-light compare-attr-div">' + 
+            '<span class="add-attr-label">ｸﾘﾃｨｶﾙ</span><span class="history-attr-span">+<span class="history-attr-cri">' + CompareTargetOtherValue['cri']+'</span>%</span></span>';
+    }
+    var html_attr = '<div>'+html_speed_atk + html_speed_cast + html_speed_move + html_cri + '</div>';
+    // History skill
+    var html_attr_skill = '<div></div>';                       
+    if(CompareTargetOtherValue.hasOwnProperty('skill')){
+        html_attr_skill = '<div class="dropdown-divider"></div><div class="badge badge-lg badge-light"><span class="badge badge-lg badge-light compare-attr-div"><span class="add-attr-label">スキル</span><span class="history-attr-span history-attr-skill" value="'+CompareTargetOtherValue.skill+'"></span></span>';
+        CompareTargetOtherValue['skill_list'].forEach(function(s){
+            html_attr_skill += '<span class="badge badge-sm badge-light history-attr-skill-item">'+_generalSkillString(s)+'</span>';
+        });
+        html_attr_skill += "</div>";
+    }
+    var html = html_attr + html_attr_skill;
+    return html;                
+}
+function insertCompareTarget(){
+    _cleanCompareValue();
+    var html_name = '<div class="col col-sm-2 history-name">' + $("#test-name").val() + '</div>';
+    // Get Equipment data
+    //TODO get weapon and designer
+    var equip_img = '';
+    $('.equip-eq').each(function(){        
+        equip_img += _generalCompareEqImgHtml(this);
+    });
+    $('.equip-ac').each(function(){        
+        equip_img += _generalCompareEqImgHtml(this);
+    });
+    $('.equip-dec').each(function(){        
+        equip_img += _generalCompareEqImgHtml(this);
+    });
+    var html_equipment = '<div class="col col-sm-4">' + equip_img + '</div>';
+    var html_performance = '<div class="col col-sm-2 data-horizontal-right"><span class="history-performance-span">'+ $("#result").text() +'</span></div>';
+    var html_compare_performance = '<div class="col col-sm-2 data-horizontal-center compare-performance-value-div"><span class="badge badge-lg badge-light compare-target-span">Target</span></div>';
+    var html_other_value = '<div class="col col-sm-1 data-horizontal-center">' 
+                + '<button class="btn btn-light btn-sm zcompare-other-value-btn'+((Object.keys(CompareTargetOtherValue).length==0)?' disable-links':'')+'" type="button" data-toggle="dropdown"  aria-haspopup="true" aria-expanded="false" title="Mouse over will compare"><img src="img/cross_mark.png" width="18px" height="18px"/></button>' 
+                + '<div class="dropdown-menu compare-other-value"><div class="compare-other-value-div">' 
+                + _generalHistoryOtherValueHtml() + '</div>' 
+                + '<div class="compare-other-value-div-compared"></div></div></div>';                
+    var html_option_btn = '<div class="col col-sm-1 data-horizontal-center">' 
+                + '<button class="btn btn-light btn-sm history-load-btn" type="button"  data-toggle="tooltip" title="Load this data">' 
+                + '<img src="img/load_mark.png" width="18px" height="18px"/>' 
+                + '</button>' 
+                + '<button class="btn btn-light btn-sm history-del-btn disable-links" type="button"  data-toggle="tooltip" title="Delete this row">' 
+                + '<img src="img/x2_mark.png" width="18px" height="18px"/>' 
+                + '</button>'
+                + '</div';
+    var html = '<div class="row justify-content-md-center row-style history-target-row" datacode="' + CompareTargetDataCode + '">'
+        + html_name
+        + html_equipment
+        + html_performance
+        + html_compare_performance
+        + html_other_value
+        + html_option_btn
+        +'</div>';
+    $("#rs-history").prepend(html); 
+    $(".history-img").tooltip();
+}
+function _compareOtherValue(parent, attr_name, attr_label){
+    var p_class = "compare-attr-eq-span"; 
+    var op = "+";
+    var html = '';       
+    var old_value = parseInt($(parent).find('.history-attr-'+attr_name).text());
+    if (old_value){
+        var compare_val = old_value - (CompareTargetOtherValue[attr_name] || 0);
+        if(compare_val > 0){
+            p_class = 'compare-attr-up-span';
+        } else if (compare_val < 0){
+            p_class = 'compare-attr-down-span';
+            op = '-';
+        }
+        html = '<span class="badge badge-lg badge-light compare-attr-div"><span class="add-attr-label">'+attr_label+'</span><span class="'+p_class+'">'+op+Math.abs(compare_val)+'%</span></span>';
+    } else if (CompareTargetOtherValue[attr_name]){
+        var compare_val = CompareTargetOtherValue[attr_name];
+        html = '<span class="badge badge-lg badge-light compare-attr-div"><span class="add-attr-label">'+attr_label+'</span><span class="compare-attr-down-span">-'+compare_val+'%</span></span>';
+    }
+    return html;
+}
+function _compareOtherValueSkill(parent){
+    var p_class = "compare-attr-eq-span"; 
+    var html = '';       
+    var old_value = $(parent).find('.history-attr-skill').attr("value");
+    var dc = new DataCode("#add-attr-div");
+    console.log('cp skill', dc.version, old_value, CompareTargetOtherValue.skill);
+    if(old_value && CompareTargetOtherValue.skill){
+        html = '<div class="badge badge-lg badge-light"><span class="badge badge-lg badge-light compare-attr-div"><span class="add-attr-label">スキル</span><span class="history-attr-span"></span></span>';        
+        var skill_list = dc.compareSkillCode(CompareTargetOtherValue.skill, old_value);        
+        skill_list.forEach(function(s){
+            var p_class = "compare-attr-eq-span"; 
+            var op = "+";
+            if(s.lv > 0){
+                p_class = "compare-attr-up-span";
+            }else if(s.lv < 0){
+                p_class = "compare-attr-down-span";
+                op = "-";
+            }
+            var html_skill = '<span class="badge badge-sm badge-light history-attr-skill-item '+p_class+'">'+_generalSkillString(s, op)+'</span>';
+            html += html_skill;
+        });
+        html += "</div>";        
+    } else if (CompareTargetOtherValue.skill){
+        html = '<div class="badge badge-lg badge-light"><span class="badge badge-lg badge-light compare-attr-div"><span class="add-attr-label">スキル</span><span class="history-attr-span"></span></span>';
+        var skill_list = CompareTargetOtherValue.skill_list;
+        skill_list.forEach(function(s){            
+            var html_skill = '<span class="badge badge-sm badge-light history-attr-skill-item compare-attr-down-span">'+_generalSkillString(s, "-")+'</span>';
+            html += html_skill;
+        }); 
+        html += "</div>";
+    }
+    return html;
+}
+function compareHistoryValue(){
+    var target_performance = parseInt($("#result").text().replace(/,/g, ""));
+    $('#rs-history').find('.history-row').each(function(){
+        // Compare Performance
+        var old_performance = parseInt($(this).find('.history-performance-span').text().replace(/,/g, ""));        
+        var op = "";
+        var compare_performance = 0;
+        var p_img = '';
+        var p_class = '';
+        if(target_performance < old_performance){
+            op = "+";
+            compare_performance = Math.round((old_performance/target_performance - 1) * 10000) / 100 ;
+            p_img = '<img class="compare-img" src="img/up_mark.png"/>';
+            p_class = 'compare-attr-up-span';
+        } else if (target_performance > old_performance){
+            op = "-";
+            compare_performance = Math.round((target_performance/old_performance - 1) * 10000) / 100;
+            p_img = '<img class="compare-img" src="img/down_mark.png"/>';
+            p_class = 'compare-attr-down-span';
+        }        
+        var html_compare_performance = p_img 
+            +'<span class="'+p_class+'">'+ op + compare_performance + '%</span>';
+        $(this).find('.compare-performance-value-div').html(html_compare_performance);
+        // Compare other value
+        var html_speed_atk = _compareOtherValue(this, 'speed_atk', '攻速');        
+        var html_speed_cast = _compareOtherValue(this, 'speed_cast', 'ｷｬｽﾄ速');
+        var html_speed_move = _compareOtherValue(this, 'speed_move', '移速');
+        var html_cri = _compareOtherValue(this, 'cri', 'ｸﾘﾃｨｶﾙ');
+        var html_other_value = html_speed_atk + html_speed_cast + html_speed_move + html_cri;        
+        // Compare other value skill
+        var html_skill = _compareOtherValueSkill(this);
+        if(html_other_value){
+            $(this).find('.compare-other-value-div-compared').append('<div>'+html_other_value+'</div>');
+        }
+        if(html_other_value && html_skill){
+            $(this).find('.compare-other-value-div-compared').append('<div class="dropdown-divider"></div>');
+        }
+        if(html_skill){
+            $(this).find('.compare-other-value-div-compared').append('<div class="badge badge-lg badge-light">'+html_skill+'</div>');
+        }
+        // Enable other value btn
+        var compare_other_value_btn = $(this).find('.compare-other-value-btn');
+        if(compare_other_value_btn.hasClass('disable-links') && (html_other_value || html_skill)){
+            compare_other_value_btn.removeClass('disable-links');
+            $(this).find('.compare-other-value-div').hide();
+            $(this).find('.compare-other-value-div-compared').show();
+        }
+        console.log("Compare | name: ", $(this).find('.history-name').text());
+        console.log("Compare | performance: ", target_performance, old_performance, compare_performance);
+    });
+}
+    </script>
 </body>
 </html>
