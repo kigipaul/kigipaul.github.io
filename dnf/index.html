@@ -165,7 +165,7 @@ input.data-code-target:out-of-range, #data-code:invalid {
           </div>
           <div class="my-2 my-sm-1">
             <select><option>JP</option></select>
-            <span class="data-code-target" value="1" id="version" data-code-length="1" style='margin:0 0 0 50px'>v1.0</span>
+            <span class="data-code-target" value="1" id="version" data-code-length="1" style='margin:0 0 0 50px'>v1.1</span>
           </div>
 		</nav>
     </div>
@@ -1030,10 +1030,12 @@ function simpleItemData(data){
     return {
         id: data["id"],
         iLv: data["iLv"],
+        iVersion: data["iVersion"],
         pic: data["pic"],
         name: data["name"],
         part: data["part"],
         setName: data["setName"],
+        setLevel: parseInt(data["setLevel"]),
         setNum: set_num,
         quality: data["quality"]
     }
@@ -1046,6 +1048,8 @@ function generalItemData(data) {
             "pic",
             "name",
             "setName",
+            "sub-setName",
+            "setLevel",
             "type",
             "part",
             "kind",
@@ -1222,44 +1226,76 @@ function checkSetEq() {
     var waist_id = $("#menu-eq-waist").attr("value");
     var shoes_id = $("#menu-eq-shoes").attr("value");
     var id_list = [clothes_id, shoulder_id, pants_id, waist_id, shoes_id];
-    ActiveSet.equipment = _checkSet(id_list);
+    ActiveSet.equipment = _checkSet(id_list, "eq");
 }
 function checkSetAc() {
     var necklace_id = $("#menu-ac-necklace").attr("value");
     var ring_id = $("#menu-ac-ring").attr("value");
     var wristband_id = $("#menu-ac-wristband").attr("value");
     var id_list = [necklace_id, ring_id, wristband_id];
-    ActiveSet.accessories = _checkSet(id_list);
+    ActiveSet.accessories = _checkSet(id_list, "ac");
 }
 function checkSetDec() {
     var stone_id = $("#menu-dec-stone").attr("value");
     var assist_id = $("#menu-dec-assist").attr("value");
     var earring_id = $("#menu-dec-earring").attr("value");
     var id_list = [stone_id, assist_id, earring_id];
-    ActiveSet.decoration = _checkSet(id_list);
+    ActiveSet.decoration = _checkSet(id_list, "dec");
 }
-function _checkSet(id_list) {
+function _checkSet(id_list, set_type) {
     var set_list = {};
     var rs_set = [];
     for(var i = 0;i < id_list.length; i++){
         var iid = id_list[i];
         if(iid && iid != "0"){
             var setName = ItemID_list[iid].setName;
+            var sub_setName = ItemID_list[iid]["sub-setName"]
             if(!set_list.hasOwnProperty(setName)){
                set_list[setName] = 1;
             } else {
                set_list[setName]++;
             }
+            if(!set_list.hasOwnProperty(sub_setName)){
+               set_list[sub_setName] = 1;
+            } else {
+               set_list[sub_setName]++;
+            }
         }
     }
+    var tmp_rs = [];
     for(var i = 0;i < ItemClass.set.length; i++){
         var set = ItemClass.set[i];
         if(set_list.hasOwnProperty(set.setName)){
             if(set_list[set.setName] >= set.setNum){
-                rs_set.push({"id": set.id, "setName": set.setName, "setNum":set.setNum, "pic": set.pic});
+                tmp_rs.push({"id": set.id, "iVersion": set.iVersion, "setName": set.setName, "setLevel": set.setLevel, "setNum":set.setNum, "pic": set.pic});
             }
         }
     }
+    tmp_rs = tmp_rs.sort(function(a, b){
+        return a.setNum < b.setNum? 1: -1;
+    });
+    var choise = null;
+    for(var i=0;i<tmp_rs.length; i++){
+        s = tmp_rs[i];
+        if (!choise) {
+            choise = s;            
+        } else if(choise.setNum == s.setNum){
+            if(choise.iVersion == s.iVersion){
+                if(choise.setLevel < s.setLevel){
+                    choise = s;
+                }
+            }
+        } else {
+            rs_set.push(choise);
+            choise = s;            
+        }
+        if(i==(tmp_rs.length-1)){
+            rs_set.push(choise);
+        }
+    }
+    rs_set = rs_set.sort(function(a, b){
+        return a.setNum > b.setNum? 1:-1;
+    });
     return rs_set;
 }
 function generateSet(){
