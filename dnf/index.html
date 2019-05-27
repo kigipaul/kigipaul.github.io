@@ -41,6 +41,9 @@ body {
 .add-attr-span, .history-attr-span {
     margin: 0 4px 0 10px;
 }
+.history-attr-other-skill-item {
+    margin: 0 4px 0 4px;
+}
 .add-attr-div {
     background-color: #e9ecef;
     font-size: 15px;
@@ -85,6 +88,12 @@ body {
     background: url('img/packup.png');
     background-repeat: no-repeat;
     background-size: 12px 12px;   
+    border-color: #e9ecef; 
+}
+.data-help-btn {
+    background: url('img/i_mark.png');
+    background-repeat: no-repeat;
+    background-size: 24px 24px;   
     border-color: #e9ecef; 
 }
 .table-head div {
@@ -165,7 +174,7 @@ input.data-code-target:out-of-range, #data-code:invalid {
           </div>
           <div class="my-2 my-sm-1">
             <select><option>JP</option></select>
-            <span class="data-code-target" value="1" id="version" data-code-length="1" style='margin:0 0 0 50px'>v1.1</span>
+            <span class="data-code-target" value="1" id="version" data-code-length="1" style='margin:0 0 0 50px'>v1.2</span>
           </div>
 		</nav>
     </div>
@@ -408,7 +417,30 @@ input.data-code-target:out-of-range, #data-code:invalid {
         <div id="basic-data">
             <div class="row justify-content-md-center">
                 <h3 class="col col-md-3">マイステータス</h3>
-                <button class="btn btn-light btn-sm data-extend-btn" status="false" target-div="basic-data-table" onClick="displayBasicData(this);" style="background-position: 2px 14px;"></button>
+                <button class="btn btn-warning data-help-btn" data-toggle="modal" data-target="#status-help-modal" title="help" style="background-position: 0px 8px;"></button>
+                <button class="btn btn-light btn-sm data-extend-btn" status="false" target-div="basic-data-table" onClick="displayBasicData(this);" style="background-position: 2px 14px;"></button>                
+            </div>
+            <div class="modal fade" id="status-help-modal" tabindex="-1" role="dialog" aria-labelledby="status-help-label" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="status-help-label">マイステータス ヘルプ</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <ol>
+                                <li>進入修鍊場</li>
+                                <li>使用自身Buff</li>
+                                <li>將裝備卸除</li>
+                                <li>打開面板(m)</li>
+                                <li>根據面板填入相對應的數值</li>
+                            </ol>
+                            <img src="img/help_status_w.gif" width="90%"/>                            
+                        </div>                        
+                    </div>
+                </div>
             </div>
             <div class="row"><hr class="style11"></div>
             <div id="basic-data-table">
@@ -642,6 +674,30 @@ input.data-code-target:out-of-range, #data-code:invalid {
                     </span>               
                 </div>
             </div>
+            <div id="add-attr-other-skill">
+                <div class="row justify-content-md-center row-style ">                
+                    <div class="col col-md-4">
+                        <span class="badge badge-lg badge-light add-attr-div">
+                            <span class="add-attr-label">追加効果</span><span class="add-attr-span">直線,2hit, 5個, 225k</span>
+                        </span>
+                    </div>
+                </div>
+                <div class="row justify-content-md-center row-style">                
+                        <div class="col col-md-4">
+                            <span class="badge badge-lg badge-light add-attr-div">
+                                <span class="add-attr-label">追加効果</span><span class="add-attr-span">單人特效:攻移速6%,唱速9%,常時壩體</span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row justify-content-md-center row-style">                
+                            <div class="col col-md-4">
+                                <span class="badge badge-lg badge-light add-attr-div">
+                                    <span class="add-attr-label">追加効果</span><span class="add-attr-span">單人特效:移速10%,常時壩體
+                                            攻擊5%大範圍單下傷害6500萬</span>
+                                </span>
+                            </div>
+                        </div>
+            </div>
         </div>
     </div>
     <div class="row"><hr class="style11"></div>
@@ -673,6 +729,7 @@ input.data-code-target:out-of-range, #data-code:invalid {
     <script src="js/datacode.js"></script>
     <script src="js/papa.js"></script>
     <script>
+var isLoaded = false;
 var ItemID_list = [];
 var ItemClass = {
     arms: {
@@ -787,6 +844,20 @@ $(function() {
     var datacode = new DataCode('.data-code-target');
     $("#data-code").val(datacode.generateDataCode());
     $("#data-code").attr("pattern", datacode.encodeBaseString);
+    var load_url_dc = setInterval(function(){
+        if(isLoaded) {
+            var url_dc = getUrlParamArray("dc");
+            if(url_dc.length > 0) {                        
+                if(!datacode.checkDataCode(url_dc[0]) || url_dc[0] == ""){
+                    console.error("Error data code input: ", url_dc[0]);
+                } else {
+                    $("#data-code").val(url_dc[0]);
+                    loadDataCode(datacode, $("#data-code").val());
+                }
+            }
+            clearInterval(load_url_dc);
+        }
+    },100);    
     // Init custom element event
     $('body').on('click', ".dropdown-item", function(){
         var menu_id = $(this).parent().attr("parent-id");
@@ -905,6 +976,17 @@ function setStatusValue(){
        }
    });
 }
+function getUrlParamArray(param){
+    param = param.replace(/([\[\](){}*?+^$.\\|])/g, "\\$1");
+    var value = [];
+    var regex = new RegExp("[?&]" + param + "=([^&#]*)", "g");
+    var url   = decodeURIComponent(window.location.href);
+    var match = null;
+    while (match = regex.exec(url)) {
+        value.push(match[1]);
+    }    
+    return value;
+}
 function parseDB(data) {
     var csv_data = Papa.parse(data);
     count = 0;
@@ -960,6 +1042,7 @@ function parseDB(data) {
     console.log(ItemClass);
     console.log(ItemID_list);
     generalSelectOption();
+    isLoaded = true;
 }
 function generalSelectOption(){
     ItemClass.equipment.clothes.forEach(function(simple_item){
@@ -1011,7 +1094,7 @@ function generalSelectOptionHtml(data, show_part){
     var value = 'value="' + data.id + '"';
     var display_name = data.iLv+'-';
     if(show_part){
-        display_name += '['+data.part+']-'
+        display_name += '['+data.type+']-'
     }
     display_name += data.name;
     var html = '<a class="dropdown-item" href="#" '+ value +' data-img-url="'+data.pic+'">' + display_name + '</a>';
@@ -1034,6 +1117,7 @@ function simpleItemData(data){
         pic: data["pic"],
         name: data["name"],
         part: data["part"],
+        type: data["type"],
         setName: data["setName"],
         setLevel: parseInt(data["setLevel"]),
         setNum: set_num,
@@ -1092,6 +1176,7 @@ function generalItemData(data) {
             "attr:aura",
             "attr:abnormal_damage",
             "attr:p-abnormal_damage",
+            "attr:spec_element",
             "attr:other",
             "sup:atkBuff_lv:m_kuruse",
             "sup:atkBuff_str:m_kuruse",
@@ -1244,24 +1329,30 @@ function checkSetDec() {
 }
 function _checkSet(id_list, set_type) {
     var set_list = {};
+    var sub_set_list = {};
     var rs_set = [];
     for(var i = 0;i < id_list.length; i++){
         var iid = id_list[i];
         if(iid && iid != "0"){
-            var setName = ItemID_list[iid].setName;
+            var setName = ItemID_list[iid].setName;            
             var sub_setName = ItemID_list[iid]["sub-setName"]
             if(!set_list.hasOwnProperty(setName)){
                set_list[setName] = 1;
             } else {
                set_list[setName]++;
             }
-            if(!set_list.hasOwnProperty(sub_setName)){
-               set_list[sub_setName] = 1;
-            } else {
-               set_list[sub_setName]++;
+            if(!sub_set_list.hasOwnProperty(sub_setName)){
+               sub_set_list[sub_setName] = 1;
+            } else if(sub_set_list.hasOwnProperty(sub_setName) && set_list[setName] > sub_set_list[sub_setName]){
+               sub_set_list[sub_setName]++;
             }
         }
     }
+    $.each(sub_set_list, function(key, val){
+        if(set_list.hasOwnProperty(key)){
+            set_list[key] += val;
+        }
+    });
     var tmp_rs = [];
     for(var i = 0;i < ItemClass.set.length; i++){
         var set = ItemClass.set[i];
@@ -1269,7 +1360,7 @@ function _checkSet(id_list, set_type) {
             if(set_list[set.setName] >= set.setNum){
                 tmp_rs.push({"id": set.id, "iVersion": set.iVersion, "setName": set.setName, "setLevel": set.setLevel, "setNum":set.setNum, "pic": set.pic});
             }
-        }
+        }        
     }
     tmp_rs = tmp_rs.sort(function(a, b){
         return a.setNum < b.setNum? 1: -1;
@@ -1419,6 +1510,7 @@ function migrateEquipAttr(){
                 aura: "",
                 abnormal_damage: "",
                 p_abnormal_damage: 0,
+                spec_element : 0,
                 other: "",
         }
     }
@@ -1511,6 +1603,12 @@ function migrateEquipAttr(){
         addAttrValue.other_damage.tyrant += _getItemAttrValue(item.attr['tyrant'], 'str');
         addAttrValue.other_damage.aura += _getItemAttrValue(item.attr['aura'], 'str');
         addAttrValue.other_damage.other += _getItemAttrValue(item.attr['other'], 'str');
+        var spec_element = parseInt(item.attr['spec_element'].slice(2), 2);
+        if(addAttrValue.other_damage.spec_element == 0 && spec_element){
+            addAttrValue.other_damage.spec_element = spec_element;
+        } else if (addAttrValue.other_damage.spec_element != 0 && spec_element) {
+            addAttrValue.other_damage.spec_element |= spec_element;
+        }
         var skill_len = 18;
         var skill = item.attr["skill"];
         var org_skill = addAttrValue.other_damage.skill;
@@ -1530,6 +1628,7 @@ function cleanAllAttrValue() {
     $('.add-attr-div').addClass('add-attr-disable');
     $('.add-attr-span').find('span').text("0");
     $('.add-attr-skill-item').remove();
+    $('#add-attr-other-skill').html("");
     setAttrValueSkillLength(0);
 }
 function setAttrValueSkillLength(num) {
@@ -1615,7 +1714,15 @@ function calcAttrValue() {
     var p_atk = 1 + AddAttrValue.direct_damage["p_"+key_basic_atk]/100;       
     var target_element_val = 0;
     var target_element_key = "";
-    var element_list = ['attr_fire', 'attr_water', 'attr_light', 'attr_dark'];
+    var element_list = [];
+    if(AddAttrValue.other_damage.spec_element == 0){
+        element_list = ['attr_fire', 'attr_water', 'attr_light', 'attr_dark'];
+    } else {
+        if(AddAttrValue.other_damage.spec_element & 8 > 0){element_list.push('attr_fire');}
+        if(AddAttrValue.other_damage.spec_element & 4 > 0){element_list.push('attr_water');}
+        if(AddAttrValue.other_damage.spec_element & 2 > 0){element_list.push('attr_light');}
+        if(AddAttrValue.other_damage.spec_element & 1 > 0){element_list.push('attr_dark');}
+    }
     element_list.forEach(function(e){
         var element_val = statusValue[e] + AddAttrValue.direct_damage[e];
         if(element_val > target_element_val){
@@ -1710,7 +1817,8 @@ function calcOtherAttrValue() {
             speed_atk: AddAttrValue.other_damage.speed_atk,
             speed_cast: AddAttrValue.other_damage.speed_cast,
             speed_move: AddAttrValue.other_damage.speed_move,
-            skill: AddAttrValue.other_damage.skill
+            skill: AddAttrValue.other_damage.skill,
+            others: AddAttrValue.other_damage.other.split("\n")
     }
     var char_type = AddAttrValue.character_type;        
     var datacode = new DataCode("#add-attr-div");
@@ -1747,6 +1855,25 @@ function calcOtherAttrValue() {
         assignAddAttrValue("cri", attrValue.cri);    
         $('#add-attr-target_cri').text(target_cri_key);
         CompareTargetOtherValue['cri'] = attrValue.cri;
+    }
+    if(attrValue.others){
+        attrValue.others.forEach(function(os){
+            if(!os || os == ""){
+                return;
+            }
+            var html = '<div class="row justify-content-md-center row-style">'
+                    +'<div class="col col-md-4">'
+                    +'<span class="badge badge-lg badge-light add-attr-div">'
+                    +'<span class="add-attr-label">追加効果</span><span class="add-attr-span">' + os +'</span>'
+                    +'</span></div></div>';
+            $("#add-attr-other-skill").append(html);
+            if(CompareTargetOtherValue.hasOwnProperty('others')){
+                CompareTargetOtherValue['others'].push(os);
+            } else {
+                CompareTargetOtherValue['others'] = [os];
+            }
+        });
+
     }
     console.log("Calc | skill: ", attrValue.skill);
     console.log("Calc | speed atk/cast/move: ", attrValue.speed_atk, attrValue.speed_cast, attrValue.speed_move);
@@ -1812,13 +1939,27 @@ function _generalHistoryOtherValueHtml(){
     // History skill
     var html_attr_skill = '<div></div>';                       
     if(CompareTargetOtherValue.hasOwnProperty('skill')){
-        html_attr_skill = '<div class="dropdown-divider"></div><div class="badge badge-lg badge-light"><span class="badge badge-lg badge-light compare-attr-div"><span class="add-attr-label">スキル</span><span class="history-attr-span history-attr-skill" value="'+CompareTargetOtherValue.skill+'"></span></span>';
+        if(html_attr != '<div></div>'){
+            html_attr_skill = '<div class="dropdown-divider"></div>';
+        }
+        html_attr_skill += '<div class="badge badge-lg badge-light"><span class="badge badge-lg badge-light compare-attr-div"><span class="add-attr-label">スキル</span><span class="history-attr-span history-attr-skill" value="'+CompareTargetOtherValue.skill+'"></span></span>';
         CompareTargetOtherValue['skill_list'].forEach(function(s){
             html_attr_skill += '<span class="badge badge-sm badge-light history-attr-skill-item">'+_generalSkillString(s)+'</span>';
         });
         html_attr_skill += "</div>";
     }
-    var html = html_attr + html_attr_skill;
+    // History other skill
+    var html_attr_other_skill = '<div></div>';
+    if(CompareTargetOtherValue.hasOwnProperty('others')){
+        if(html_attr != '<div></div>' || html_attr_skill != '<div></div>'){
+            html_attr_other_skill = '<div class="dropdown-divider"></div>';
+        }        
+        CompareTargetOtherValue['others'].forEach(function(os){
+            html_attr_other_skill += '<span class="badge badge-lg badge-light compare-attr-div">'
+                    +'<span class="add-attr-label">追加效果</span><span class="history-attr-span">' + os +'</span></span>';
+        });        
+    }
+    var html = html_attr + html_attr_skill + html_attr_other_skill;
     return html;                
 }
 function insertCompareTarget(){
