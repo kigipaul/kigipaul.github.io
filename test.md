@@ -6,12 +6,13 @@ category: RESTFUL API
 - [User API](#user-api)
   - [GET /ENC/API/user/alarm_filter/receive_threshold](#get-encapiuseralarm_filterreceive_threshold)
   - [POST /ENC/API/user/alarm_filter/receive_threshold](#post-encapiuseralarm_filterreceive_threshold)
-  - [PUT /ENC/API/user/alarm_filter/receive_threshold/&lt;filter_id&gt;](#put-encapiuseralarm_filterreceive_thresholdltfilter_idgt)
-  - [DELETE /ENC/API/user/alarm_filter/receive_threshold/&lt;filter_id&gt;](#delete-encapiuseralarm_filterreceive_thresholdltfilter_idgt)
+  - [PUT /ENC/API/user/alarm_filter/receive_threshold/&lt;filter_id&gt;](#put-encapiuseralarm_filterreceive_thresholdfilter_id)
+  - [DELETE /ENC/API/user/alarm_filter/receive_threshold/&lt;filter_id&gt;](#delete-encapiuseralarm_filterreceive_thresholdfilter_id)
   - [GET /ENC/API/user/alarm_filter/as_path](#get-encapiuseralarm_filteras_path)
   - [POST /ENC/API/user/alarm_filter/as_path](#post-encapiuseralarm_filteras_path)
-  - [PUT /ENC/API/user/alarm_filter/as_path/&lt;filter_id&gt;](#put-encapiuseralarm_filteras_pathltfilter_idgt)
+  - [PUT /ENC/API/user/alarm_filter/as_path/&lt;filter_id&gt;](#put-encapiuseralarm_filteras_pathfilter_id)
   - [DELETE /ENC/API/user/alarm_filter/as_path/&lt;filter_id&gt;](#delete-encapiuseralarm_filteras_pathfilter_id)
+
   
 ### GET /ENC/API/user/alarm_filter/receive_threshold
 get alarm filter receive threshold setting
