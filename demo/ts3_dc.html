@@ -1,0 +1,339 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+.app { display: flex; height: 600px; background: var(--color-background-secondary); border-radius: var(--border-radius-lg); border: 0.5px solid var(--color-border-tertiary); overflow: hidden; font-family: var(--font-sans); }
+
+.sidebar { width: 210px; min-width: 210px; background: var(--color-background-primary); border-right: 0.5px solid var(--color-border-tertiary); display: flex; flex-direction: column; overflow-y: auto; }
+.srv-header { padding: 11px 14px; border-bottom: 0.5px solid var(--color-border-tertiary); font-weight: 500; font-size: 14px; display: flex; align-items: center; gap: 8px; }
+.online-dot { width: 7px; height: 7px; border-radius: 50%; background: #22c55e; }
+
+.sec { padding: 10px 8px 2px; }
+.sec-label { font-size: 10px; color: var(--color-text-tertiary); font-weight: 500; letter-spacing: 0.07em; padding: 0 6px 5px; text-transform: uppercase; }
+.ch { display: flex; align-items: center; gap: 7px; padding: 5px 8px; border-radius: 6px; cursor: pointer; font-size: 13px; color: var(--color-text-secondary); transition: background 0.1s; }
+.ch:hover, .ch.active { background: var(--color-background-secondary); color: var(--color-text-primary); }
+.ch.active { background: var(--color-background-info); color: var(--color-text-info); }
+
+.voice-sec { margin-top: auto; border-top: 0.5px solid var(--color-border-tertiary); padding: 8px; }
+.voice-label { font-size: 10px; color: var(--color-text-tertiary); font-weight: 500; letter-spacing: 0.07em; padding: 0 6px 6px; text-transform: uppercase; display: flex; align-items: center; gap: 5px; }
+.pill { font-size: 10px; border-radius: 4px; padding: 1px 5px; font-weight: 500; letter-spacing: 0; text-transform: none; }
+.pill-blue { background: var(--color-background-info); color: var(--color-text-info); }
+.pill-green { background: var(--color-background-success); color: var(--color-text-success); }
+
+.vc { padding: 4px 6px; border-radius: 6px; cursor: pointer; transition: background 0.1s; }
+.vc:hover { background: var(--color-background-secondary); }
+.vc-row { display: flex; align-items: center; gap: 7px; font-size: 13px; color: var(--color-text-secondary); }
+.vc-row span { font-size: 13px; }
+.vc-count { margin-left: auto; font-size: 11px; color: var(--color-text-tertiary); }
+.vc-members { padding: 2px 0 2px 24px; }
+.mbr { display: flex; align-items: center; gap: 5px; padding: 2px 4px; font-size: 11px; color: var(--color-text-tertiary); }
+.av { width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 500; flex-shrink: 0; }
+
+.main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.ch-header { padding: 9px 16px; border-bottom: 0.5px solid var(--color-border-tertiary); display: flex; align-items: center; gap: 8px; }
+.ch-name { font-weight: 500; font-size: 14px; }
+.ch-desc { font-size: 12px; color: var(--color-text-tertiary); }
+
+.content-area { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+.voice-panel { border-bottom: 0.5px solid var(--color-border-tertiary); background: var(--color-background-primary); }
+.voice-panel.hidden { display: none; }
+
+.panel-tabs { display: flex; border-bottom: 0.5px solid var(--color-border-tertiary); padding: 0 12px; gap: 2px; }
+.tab { padding: 7px 12px; font-size: 12px; color: var(--color-text-tertiary); cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.1s; white-space: nowrap; }
+.tab:hover { color: var(--color-text-primary); }
+.tab.active { color: var(--color-text-info); border-bottom-color: #3b82f6; }
+
+.panel-body { padding: 12px; }
+
+.mode-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.mode-card { border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 10px; cursor: pointer; transition: all 0.15s; background: var(--color-background-secondary); }
+.mode-card:hover { border-color: var(--color-border-secondary); background: var(--color-background-primary); }
+.mode-card.selected { border-color: #3b82f6; background: var(--color-background-info); }
+.mode-card .mc-icon { font-size: 18px; margin-bottom: 5px; }
+.mode-card .mc-title { font-size: 12px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 2px; }
+.mode-card .mc-desc { font-size: 11px; color: var(--color-text-tertiary); line-height: 1.4; }
+.mode-card.selected .mc-desc { color: var(--color-text-info); }
+
+.action-row { display: flex; gap: 8px; margin-top: 10px; align-items: center; }
+.btn { padding: 6px 14px; font-size: 12px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-secondary); cursor: pointer; font-weight: 500; transition: opacity 0.1s; }
+.btn-primary { background: var(--color-background-info); color: var(--color-text-info); }
+.btn-ghost { background: var(--color-background-primary); color: var(--color-text-secondary); }
+.btn:hover { opacity: 0.8; }
+.hint-text { font-size: 11px; color: var(--color-text-tertiary); flex: 1; }
+
+.jitsi-view { background: #111; border-radius: var(--border-radius-md); height: 140px; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 6px; margin-top: 10px; }
+.jitsi-view.hidden { display: none; }
+.jitsi-placeholder { font-size: 12px; color: #666; }
+.jitsi-live { display: flex; align-items: center; gap: 6px; }
+.live-dot { width: 6px; height: 6px; border-radius: 50%; background: #ef4444; animation: pulse 1.2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+.msgs { flex: 1; overflow-y: auto; padding: 10px 16px; display: flex; flex-direction: column; gap: 10px; }
+.msg { display: flex; gap: 9px; align-items: flex-start; }
+.msg-av { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 500; flex-shrink: 0; }
+.msg-body { flex: 1; min-width: 0; }
+.msg-meta { display: flex; align-items: baseline; gap: 7px; margin-bottom: 1px; }
+.msg-name { font-size: 13px; font-weight: 500; }
+.msg-time { font-size: 11px; color: var(--color-text-tertiary); }
+.msg-txt { font-size: 13px; color: var(--color-text-secondary); line-height: 1.5; }
+
+.sys-msg { font-size: 11px; color: var(--color-text-tertiary); padding: 2px 0; display: flex; align-items: center; gap: 6px; }
+.sys-line { flex: 1; height: 0.5px; background: var(--color-border-tertiary); }
+
+.callout { background: var(--color-background-secondary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 8px 10px; margin-top: 4px; display: flex; align-items: center; gap: 9px; }
+.callout-info { flex: 1; min-width: 0; }
+.callout-title { font-size: 12px; font-weight: 500; color: var(--color-text-primary); }
+.callout-sub { font-size: 11px; color: var(--color-text-tertiary); }
+.callout-badges { display: flex; gap: 4px; margin-top: 3px; }
+.badge { font-size: 10px; padding: 1px 6px; border-radius: 4px; font-weight: 500; }
+.badge-ts3 { background: #dbeafe; color: #1d4ed8; }
+.badge-jitsi { background: #d1fae5; color: #065f46; }
+
+.input-area { padding: 9px 16px; border-top: 0.5px solid var(--color-border-tertiary); display: flex; gap: 8px; }
+.input-area input { flex: 1; padding: 7px 11px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-secondary); background: var(--color-background-secondary); font-size: 13px; color: var(--color-text-primary); outline: none; font-family: var(--font-sans); }
+.input-area input:focus { border-color: var(--color-border-primary); }
+.send-btn { padding: 7px 12px; font-size: 12px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-secondary); background: var(--color-background-primary); cursor: pointer; color: var(--color-text-secondary); }
+
+.status-bar { padding: 5px 16px; background: var(--color-background-primary); border-top: 0.5px solid var(--color-border-tertiary); font-size: 11px; color: var(--color-text-tertiary); display: flex; align-items: center; gap: 10px; }
+.s-dot { width: 5px; height: 5px; border-radius: 50%; }
+</style>
+
+<div class="app">
+  <div class="sidebar">
+    <div class="srv-header">
+      <div class="online-dot"></div>
+      MyServer
+    </div>
+    <div class="sec">
+      <div class="sec-label">文字頻道</div>
+      <div class="ch active">
+        <span style="font-size:13px;color:inherit">#</span> 一般聊天
+      </div>
+      <div class="ch">
+        <span style="font-size:13px;color:inherit">#</span> 公告
+      </div>
+      <div class="ch">
+        <span style="font-size:13px;color:inherit">#</span> 遊戲討論
+      </div>
+    </div>
+
+    <div class="voice-sec">
+      <div class="voice-label">
+        語音 <span class="pill pill-blue">TS3</span> <span class="pill pill-green">Jitsi</span>
+      </div>
+
+      <div class="vc" onclick="openVC('大廳')">
+        <div class="vc-row"><span>🔊</span> 大廳 <span class="vc-count">3</span></div>
+        <div class="vc-members">
+          <div class="mbr"><div class="av" style="background:#dbeafe;color:#1d4ed8">A</div>Alex</div>
+          <div class="mbr"><div class="av" style="background:#fce7f3;color:#9d174d">M</div>Maya</div>
+          <div class="mbr"><div class="av" style="background:#d1fae5;color:#065f46">K</div>Kai</div>
+        </div>
+      </div>
+      <div class="vc" onclick="openVC('遊戲室')">
+        <div class="vc-row"><span>🔊</span> 遊戲室 <span class="vc-count">1</span></div>
+        <div class="vc-members">
+          <div class="mbr"><div class="av" style="background:#fef3c7;color:#92400e">J</div>Juno</div>
+        </div>
+      </div>
+      <div class="vc" onclick="openVC('AFK')">
+        <div class="vc-row"><span>🔇</span> AFK <span class="vc-count">0</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="ch-header">
+      <span style="font-size:14px;color:var(--color-text-tertiary)">#</span>
+      <span class="ch-name">一般聊天</span>
+      <span style="color:var(--color-border-secondary);font-size:12px">|</span>
+      <span class="ch-desc">歡迎來到伺服器</span>
+    </div>
+
+    <div class="content-area">
+      <div class="voice-panel hidden" id="voice-panel">
+        <div class="panel-tabs">
+          <div class="tab active" onclick="switchTab('mode')">加入方式</div>
+          <div class="tab" onclick="switchTab('jitsi')" id="jitsi-tab">Jitsi 畫面</div>
+        </div>
+        <div class="panel-body" id="tab-mode">
+          <div class="mode-grid">
+            <div class="mode-card" id="mode-ts3" onclick="selectMode('ts3')">
+              <div class="mc-icon">🎙</div>
+              <div class="mc-title">僅語音 (TS3)</div>
+              <div class="mc-desc">最低延遲<br>最高音質</div>
+            </div>
+            <div class="mode-card" id="mode-jitsi" onclick="selectMode('jitsi')">
+              <div class="mc-icon">🖥</div>
+              <div class="mc-title">僅畫面 (Jitsi)</div>
+              <div class="mc-desc">看畫面分享<br>靜音麥克風</div>
+            </div>
+            <div class="mode-card" id="mode-both" onclick="selectMode('both')">
+              <div class="mc-icon">⚡</div>
+              <div class="mc-title">語音 + 畫面</div>
+              <div class="mc-desc">TS3 語音<br>Jitsi 靜音進入</div>
+            </div>
+          </div>
+          <div class="action-row">
+            <span class="hint-text" id="mode-hint">選擇加入方式</span>
+            <button class="btn btn-ghost" onclick="closePanel()">取消</button>
+            <button class="btn btn-primary" id="join-btn" onclick="doJoin()">加入</button>
+          </div>
+        </div>
+        <div id="tab-jitsi" style="display:none">
+          <div class="panel-body">
+            <div class="jitsi-view" id="jitsi-view">
+              <div class="jitsi-placeholder">尚未加入 Jitsi</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="msgs" id="messages">
+        <div class="sys-msg"><div class="sys-line"></div>今天<div class="sys-line"></div></div>
+        <div class="msg">
+          <div class="msg-av" style="background:#dbeafe;color:#1d4ed8">A</div>
+          <div class="msg-body">
+            <div class="msg-meta"><span class="msg-name">Alex</span><span class="msg-time">20:10</span></div>
+            <div class="msg-txt">等等要開黑嗎？我來開頻道</div>
+          </div>
+        </div>
+        <div class="msg">
+          <div class="msg-av" style="background:#fce7f3;color:#9d174d">M</div>
+          <div class="msg-body">
+            <div class="msg-meta"><span class="msg-name">Maya</span><span class="msg-time">20:12</span></div>
+            <div class="msg-txt">好啊，但我想看你的畫面操作，你可以開 Jitsi 分享嗎</div>
+          </div>
+        </div>
+        <div class="msg">
+          <div class="msg-av" style="background:#dbeafe;color:#1d4ed8">A</div>
+          <div class="msg-body">
+            <div class="msg-meta"><span class="msg-name">Alex</span><span class="msg-time">20:13</span></div>
+            <div class="msg-txt">已加入大廳 🎙</div>
+            <div class="callout">
+              <div class="callout-info">
+                <div class="callout-title">加入大廳 — 語音 + 畫面模式</div>
+                <div class="callout-sub">my-server.com · 3 人</div>
+                <div class="callout-badges">
+                  <span class="badge badge-ts3">TS3 語音</span>
+                  <span class="badge badge-jitsi">Jitsi 畫面分享</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="msg">
+          <div class="msg-av" style="background:#fce7f3;color:#9d174d">M</div>
+          <div class="msg-body">
+            <div class="msg-meta"><span class="msg-name">Maya</span><span class="msg-time">20:14</span></div>
+            <div class="msg-txt">我只看畫面不說話，靜音進</div>
+            <div class="callout">
+              <div class="callout-info">
+                <div class="callout-title">加入大廳 — 僅畫面</div>
+                <div class="callout-sub">my-server.com · Jitsi 靜音加入</div>
+                <div class="callout-badges">
+                  <span class="badge badge-jitsi">Jitsi 靜音</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="input-area">
+        <input id="msg-input" type="text" placeholder="傳送訊息至 #一般聊天" onkeydown="sendMsg(event)" />
+        <button class="send-btn" onclick="sendMsg({key:'Enter'})">傳送</button>
+      </div>
+    </div>
+
+    <div class="status-bar">
+      <div class="s-dot" style="background:#22c55e"></div>TS3 已連線
+      <div class="s-dot" style="background:#22c55e"></div>Jitsi 已連線
+      <span style="margin-left:auto;font-size:11px;color:var(--color-text-tertiary)">點左側頻道試試看</span>
+    </div>
+  </div>
+</div>
+
+<script>
+const SERVER_IP = 'my-server.com';
+const JITSI_URL = 'meet.my-server.com';
+let currentChannel = '';
+let selectedMode = '';
+
+function openVC(ch) {
+  currentChannel = ch;
+  selectedMode = '';
+  document.getElementById('voice-panel').classList.remove('hidden');
+  ['mode-ts3','mode-jitsi','mode-both'].forEach(id => document.getElementById(id).classList.remove('selected'));
+  document.getElementById('mode-hint').textContent = '選擇加入方式';
+  switchTab('mode');
+}
+function closePanel() {
+  document.getElementById('voice-panel').classList.add('hidden');
+}
+
+function switchTab(t) {
+  document.querySelectorAll('.tab').forEach((el,i) => el.classList.toggle('active', (t==='mode'&&i===0)||(t==='jitsi'&&i===1)));
+  document.getElementById('tab-mode').style.display = t==='mode'?'block':'none';
+  document.getElementById('tab-jitsi').style.display = t==='jitsi'?'block':'none';
+}
+
+function selectMode(m) {
+  selectedMode = m;
+  ['ts3','jitsi','both'].forEach(id => {
+    document.getElementById('mode-'+id).classList.toggle('selected', id===m);
+  });
+  const hints = {
+    ts3: '將開啟 TS3 客戶端並加入頻道',
+    jitsi: '將以靜音方式加入 Jitsi 會議室',
+    both: '將同時開啟 TS3 語音 + Jitsi 靜音加入'
+  };
+  document.getElementById('mode-hint').textContent = hints[m];
+}
+
+function doJoin() {
+  if (!selectedMode) { document.getElementById('mode-hint').textContent = '請先選擇加入方式'; return; }
+  const m = selectedMode, ch = currentChannel;
+  
+  if (m === 'ts3' || m === 'both') {
+    const uri = `ts3server://${SERVER_IP}?port=9987&channel=${encodeURIComponent(ch)}`;
+    const a = document.createElement('a'); a.href = uri; a.click();
+  }
+  if (m === 'jitsi' || m === 'both') {
+    const room = ch.replace(/\s/g,'-');
+    const params = m === 'jitsi' ? '#config.startWithAudioMuted=true&config.startWithVideoMuted=true' : '#config.startWithAudioMuted=true';
+    window.open(`https://${JITSI_URL}/${room}${params}`, '_blank');
+    document.getElementById('jitsi-view').innerHTML = `<div class="jitsi-live"><div class="live-dot"></div><span style="font-size:12px;color:#aaa">Jitsi 已開啟 — ${ch}</span></div><div style="font-size:11px;color:#666;margin-top:4px">meet.my-server.com/${room.toLowerCase()}</div>`;
+    document.getElementById('jitsi-tab').style.opacity = '1';
+  }
+
+  const badges = { ts3: 'badge-ts3', jitsi: 'badge-jitsi', both: 'both' };
+  const labels = { ts3: 'TS3 語音', jitsi: 'Jitsi 靜音', both: '語音 + 畫面' };
+  const now = new Date().toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'});
+  const msgs = document.getElementById('messages');
+  const div = document.createElement('div');
+  div.className = 'msg';
+  let badgeHTML = '';
+  if (m==='ts3') badgeHTML = '<span class="badge badge-ts3">TS3 語音</span>';
+  else if (m==='jitsi') badgeHTML = '<span class="badge badge-jitsi">Jitsi 靜音</span>';
+  else badgeHTML = '<span class="badge badge-ts3">TS3 語音</span><span class="badge badge-jitsi">Jitsi 靜音</span>';
+  div.innerHTML = `<div class="msg-av" style="background:#ede9fe;color:#5b21b6">你</div><div class="msg-body"><div class="msg-meta"><span class="msg-name">你</span><span class="msg-time">${now}</span></div><div class="callout"><div class="callout-info"><div class="callout-title">加入 ${ch} — ${labels[m]}</div><div class="callout-sub">${SERVER_IP}</div><div class="callout-badges">${badgeHTML}</div></div></div></div>`;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+  closePanel();
+}
+
+function sendMsg(e) {
+  if (e.key !== 'Enter') return;
+  const input = document.getElementById('msg-input');
+  const text = input.value.trim(); if (!text) return;
+  input.value = '';
+  const now = new Date().toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'});
+  const msgs = document.getElementById('messages');
+  const div = document.createElement('div');
+  div.className = 'msg';
+  div.innerHTML = `<div class="msg-av" style="background:#ede9fe;color:#5b21b6">你</div><div class="msg-body"><div class="msg-meta"><span class="msg-name">你</span><span class="msg-time">${now}</span></div><div class="msg-txt">${text.replace(/</g,'&lt;')}</div></div>`;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+</script>
